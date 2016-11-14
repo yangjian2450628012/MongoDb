@@ -62,19 +62,17 @@ $('#authAll').bind('click', function(){
 					//获取右边的节点序号
 					var _nodech = treeCh.getNodes();
 					if (_nodech.length > 0) {
-						console.log(nodes[d].getPreNode());
-						var i = treeCh.getNodeIndex(nodes[d].getPreNode());
-						alert(i);
-						if(i != -1){
+						var i = nodes[d].getPreNode()!=null ? treeCh.getNodeIndex(treeCh.getNodeByParam("name", nodes[d].getPreNode().name)):null;
+						if(i !=null && i != -1){
 							treeCh.addNodes(null,i+1,nodes);
 							return;
 						}
-						var __i = treeCh.getNodeIndex(nodes[d].getNextNode());
-						alert(__i);
-						if(__i != -1){
+						var __i =nodes[d].getNextNode()!=null ? treeCh.getNodeIndex(treeCh.getNodeByParam("name", nodes[d].getNextNode().name)):null;
+						if(__i !=null && __i != -1){
 							treeCh.addNodes(null,__i-1,nodes);
 							return;
 						}
+						
 						var _b = false;
 						for ( var _ch in _nodech) {
 							var _i = treeCh.getNodeIndex(_nodech[_ch]);
