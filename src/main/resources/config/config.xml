@@ -1,0 +1,31 @@
+<auths name="权限列表" password="1q1q1q1q">
+	<auth name="总经理办公室" username="zjl" organization="1" dept="1"  job="总经理办公室经理" >
+		<bumen name="人事部门" username="rsbm"  dept="1_110" organization="1" job="人事部门经理">
+			<persons name="小杨" username="yangjian_tnt@qq.com" dept="1_110" organization="1_110" job="人事部门小杨">
+					
+			</persons>
+		</bumen>
+		<bumen name="技术部门" username="jsbm" dept="1_111" organization="1" job="技术部门经理">
+		
+		</bumen>
+		<bumen name="行政部门" username="xzbm" dept="1_112" organization="1" job="行政部门经理">
+		
+		</bumen>
+		<bumen name="业务部门" username="ywbm" dept="1_113" organization="1" job="业务部门经理">
+		
+		</bumen>
+		<bumen name="财务部门" username="cwbm" dept="1_114" organization="1" job="财务部门经理">
+		
+		</bumen>
+		<bumen name="采购部门" username="cgbm" dept="1_115" organization="1" job="采购部门经理">
+			
+		</bumen>
+		<bumen name="后勤部门" username="hqbm" dept="1_116" organization="1" job="后勤部门经理">
+		
+		</bumen>
+	</auth>
+	<auth name="管理员" orgid="0" oorgid="">
+		<person name="管理员" username="admin" dept="0" organization="0" job="管理员">
+		</person>
+	</auth>
+</auths>
