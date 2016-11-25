@@ -61,6 +61,25 @@ public class ManagerController {
 	}
 	
 	/**
+	 * 菜单管理界面初始化
+	 * @param session
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value="/menumanager",method=RequestMethod.GET)
+	public String toMenumanager(HttpSession session) throws Exception{
+		Admin admin = (Admin)session.getAttribute("user");
+		if("admin".equals(admin.getUsername()))
+		{
+			admin = null;
+			return "menuInfo";
+		}else
+		{
+			throw new Exception("你不是管理员,没有权限访问!");
+		}
+	}
+	
+	/**
 	 * 查询用户管理数据
 	 * @param page
 	 * @param rows

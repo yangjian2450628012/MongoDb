@@ -46,7 +46,7 @@ if(_data.authmenu !="" && typeof eval("("+_data.authmenu+")") =="object")
 	}	
 }	
 $.fn.zTree.init($("#treeM"), setting, zNodes);
-
+zNodes = null;
 $('#authAll').bind('click', function(){    
 	var treeObj = $.fn.zTree.getZTreeObj("treeAll");
 	var nodes = treeObj.getSelectedNodes();
@@ -108,7 +108,41 @@ $('#authAll').bind('click', function(){
 			}
 		}
 	}
-}); 
+});
+/* $('#authAll').bind('click', function(){ 
+	//重新构建数组
+	var treeObj = $.fn.zTree.getZTreeObj("treeAll");
+	var nodes = treeObj.getSelectedNodes();
+	if(nodes.length > 0)
+	{
+		var treeCh = $.fn.zTree.getZTreeObj("treeM");
+		var nodesCh = treeCh.getNodes() != null ? treeCh.transformToArray(treeCh.getNodes()) : Array();
+		for(var d in nodes){//拼接array
+			if(treeCh.getNodeByParam("id", nodes[d].id) == null){
+				nodesCh.push(nodes[d]);
+			}
+			if(nodes[d].children != undefined){
+				var _node = nodes[d].children;
+				for ( var _d in _node) {
+					if(treeCh.getNodeByParam("id", _node[_d].id) == null){
+						nodesCh.push(_node[_d]);
+					}
+					if(_node[_d].children != undefined){
+						var __node = _node[_d].children;
+						for ( var __d in __node) {
+							if(treeCh.getNodeByParam("id", __node[__d].id) == null){
+								nodesCh.push(__node[__d]);
+							}
+						}
+					}
+				}
+			}
+		}
+		treeCh.addNodes(null, nodesCh);
+	}
+}); */
+
+
 $('#authUser').bind('click', function(){    
 	var treeObj = $.fn.zTree.getZTreeObj("treeM");
 	var nodes = treeObj.getSelectedNodes();

@@ -1,6 +1,9 @@
+/*
+ * well v1.0
+ */
 var well = {
 		init : function(){
-			/**下拉框更换皮肤*/
+			/*下拉框更换皮肤*/
 			$("#theme-id").combobox({    
 				data: [{name:'默认',value:'default'},
 				       {name:'灰色',value:'gray'},
@@ -18,33 +21,29 @@ var well = {
 			    	well._change();
 			    }
 			});  
-			/**去掉accordion-one 更改皮肤的光标*/
+			/*去掉accordion-one 更改皮肤的光标*/
 			$("#accordion-one").prev().css("cursor","default");
 			$("#accordion-one").prev().find(".panel-title").css("margin-top","-2px");
-			/**
-			 * 初始化tab页
-			 */
+			/* 初始化tab页*/
 			$("#_tabs").tabs({
 				fit : true,
 				border : false
 			});
-			/**
-			 * 选择工作日程触发事件
-			 */
+			/* 选择工作日程触发事件*/
 			$('#job-calendar').calendar({
 				onSelect: function(date){
 					alert(date.getFullYear()+":"+(date.getMonth()+1)+":"+date.getDate());
 				}
 			});
 			
-			/**拼接树形菜单*/
+			/*拼接树形菜单*/
 			var zNodes =[{name:"系统模块",open:true,
 			     		children: [{name:"用户管理", "_name":"用户管理","url":contextPath+"/manager/usermanager",target:"my-ifream用户管理"}
 				]},{name:"菜单模块",open:true,
 						children: [{name:"菜单管理","_name":"菜单管理","url":contextPath+"/manager/menumanager",target:"my-ifream菜单管理"}]
 				}];
 
-			/**给树形节点增加触发事件*/
+			/*给树形节点增加触发事件*/
 			var setting = {
 					treeId: "",
 					treeObj: null,
@@ -55,9 +54,7 @@ var well = {
 
 			$.fn.zTree.init($("#authManager"), setting, zNodes);
 			
-			/**
-			 * easyui树形结构
-			 */
+			/*Easyui树形结构*/
 			$('#_tree').tree({
 				onClick: function(node){
 					if(node.url)
@@ -93,9 +90,7 @@ var well = {
 				}
 			});
 
-			/**
-			 * 主菜单选中效果
-			 */
+			/*主菜单选中效果*/
 			$(".titleMenu-div a").click(function(){
 				if($(this).attr("class") == "active")
 				return;
@@ -108,7 +103,7 @@ var well = {
 				});
 				$(this).attr("class","active");
 				
-				/**调用继承jQuery的函数*/
+				/*调用继承jQuery的函数*/
 				$(".menu-div").menuCom({
 					text : $.trim($(this).text()),
 					callback : function(s){
@@ -146,9 +141,7 @@ var well = {
 				});
 			});
 
-			/**
-			 * 主菜单的二级菜单选中效果
-			 */
+			/*主菜单的二级菜单选中效果*/
 			$(".menu-div").on("click","a",function(event){
 				if($(this).parent().parent().parent().attr("class") == "show-child")
 				{
@@ -166,9 +159,7 @@ var well = {
 				});
 				$(this).attr("class","active");
 			});
-			/**
-			 * 二级菜单的子菜单选中效果
-			 */
+			/*二级菜单的子菜单选中效果*/
 			$(".show-child a:first-child").on("click",function(event){
 				var menu = $(".menu-div");
 				//二级菜单的子菜单滑动效果实现
@@ -194,13 +185,11 @@ var well = {
 			    }
 			});
 			
-			/**
-			 * 一分钟调用一次更新时间
-			 */
+			/*一分钟调用一次更新时间*/
 			setInterval("well.show_cur_times()",1000);
 		},
 		_change : function(){
-			/**更改框架皮肤*/
+			/*更改框架皮肤*/
 			/*var theme = $("select[name=theme]").val();*/
 			var theme = $("#theme-id").combobox("getValue");
 			var href = $("#easyuiTheme").attr("href").replace($("#easyuiTheme").attr("href").split("/")[4], theme);
@@ -284,8 +273,9 @@ var well = {
 					    closable:true,    
 					    tools:[{    
 					        iconCls:'icon-mini-refresh',    
-					        handler:function(){    
-					            //刷新页面
+					        handler:function(){
+					        	//刷新页面
+					        	if($(this).parent().parent(".tabs-selected")[0]==undefined)return;
 					        	var tab = $('#_tabs').tabs('getSelected');
 					        	$('#_tabs').tabs('update', {
 					        		tab: tab,
