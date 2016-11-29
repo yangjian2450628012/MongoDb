@@ -10,10 +10,20 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:config/applicationContext.xml")
-public class MainTest {
+public class MainTest extends Aaa{
 
 	@Test
 	public void run(){
 		//测试
 	}
+
+	@Override
+	@Test
+	public void say() {
+		System.out.println("猫叫：喵喵...");  
+	}
+}
+
+abstract class Aaa {
+	public abstract void say();
 }

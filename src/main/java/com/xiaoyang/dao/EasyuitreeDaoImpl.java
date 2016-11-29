@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.xiaoyang.entity.Admin;
@@ -22,7 +21,6 @@ import com.xiaoyang.entity.Trees;
 import com.xiaoyang.util.EasyuiResult;
 
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 /** 
 * @ClassName: EasyuitreeDaoImpl 
