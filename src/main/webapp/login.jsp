@@ -29,7 +29,7 @@
 				</div>
 
 				<div class="formRow">
-					<img class="controls" src="" id="checkCodeImg" style="cursor: pointer;border: 1px #ccc solid;"
+					<img class="controls" src="<%=request.getContextPath() %>/getCode" id="checkCodeImg" style="cursor: pointer;border: 1px #ccc solid;"
 						onclick="this.src=this.src+'?'+Math.random();"
 						title="看不清？点击更换" />
 				</div>
@@ -37,7 +37,7 @@
 				<div class="formRow">
 					<div class="input-prepend">
 						<span class="add-on"><i class="icon-check"></i> </span>
-						<input type="text" id="validation" name="validation" maxlength="4" placeholder="验证码"/>
+						<input type="text" id="validation" name="validation" maxlength="5" placeholder="验证码"/>
 					</div>
 				</div>
 				<div class="formRow clearfix">

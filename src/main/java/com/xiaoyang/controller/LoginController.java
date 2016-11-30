@@ -3,6 +3,8 @@ package com.xiaoyang.controller;
 import java.io.IOException;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.xiaoyang.entity.Admin;
 import com.xiaoyang.service.impl.LoginService;
+import com.xiaoyang.util.ValidateCodeUtil;
 
 /** 
 * @ClassName: LoginController 
@@ -59,14 +62,41 @@ public class LoginController {
 	}
 	
 	/**
+	 * 获取验证码
+	 * @param request
+	 * @param response
+	 */
+	@RequestMapping(value="/getCode",method=RequestMethod.GET)
+	public void getCode(HttpServletRequest request,HttpServletResponse response){
+		try {
+			response.setContentType("image/jpeg");
+			//禁止图像缓存。  
+		    response.setHeader("Pragma", "no-cache");  
+		    response.setHeader("Cache-Control", "no-cache");  
+		    response.setDateHeader("Expires", 0);
+		    HttpSession session = request.getSession();  
+		    
+		    new ValidateCodeUtil(120,30,5,70).createCode();
+		    session.setAttribute("code", ValidateCodeUtil.getCode());
+		    ImageIO.write(ValidateCodeUtil.getBuffImg(), "png", response.getOutputStream());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * 验证用户登录信息
 	 * @param _value
 	 * @param session
 	 * @return
 	 */
 	@RequestMapping(value="check",method=RequestMethod.POST)
-	public ModelAndView goCheck(@RequestParam(value = "_value")String _value,HttpSession session){
-		boolean b = this.loginSevice.query(_value,session);
+	public ModelAndView goCheck(@RequestParam(value = "_value")String _value,@RequestParam(value = "validation")String va,HttpSession session){
+		boolean b; 
+		if(!va.toUpperCase().equals(session.getAttribute("code"))){
+			b = false;
+		}else
+			b= this.loginSevice.query(_value,session);
 		if(b)
 		{
 			session.setAttribute("userinfo", b);
@@ -88,6 +118,7 @@ public class LoginController {
 	public void goLogout(HttpSession session,HttpServletResponse response){
 		session.setAttribute("userinfo", false);
 		session.setAttribute("user", null);
+		session.setAttribute("code", null);
 		try {
 			response.sendRedirect("login.jsp");
 		} catch (IOException e) {
