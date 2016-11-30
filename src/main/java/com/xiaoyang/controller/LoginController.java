@@ -76,7 +76,7 @@ public class LoginController {
 		    response.setDateHeader("Expires", 0);
 		    HttpSession session = request.getSession();  
 		    
-		    new ValidateCodeUtil(120,30,5,70).createCode();
+		    new ValidateCodeUtil(120,30,5,30).createCode();
 		    session.setAttribute("code", ValidateCodeUtil.getCode());
 		    ImageIO.write(ValidateCodeUtil.getBuffImg(), "png", response.getOutputStream());
 		} catch (Exception e) {
