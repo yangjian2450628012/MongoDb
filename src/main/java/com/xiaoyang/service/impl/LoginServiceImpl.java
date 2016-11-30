@@ -1,6 +1,6 @@
 package com.xiaoyang.service.impl;
 
-import java.io.UnsupportedEncodingException;
+import java.io.IOException;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 import com.xiaoyang.dao.LoginDao;
 import com.xiaoyang.entity.Admin;
 
-import sun.misc.BASE64Encoder;
+import sun.misc.BASE64Decoder;
 
 /** 
 * @ClassName: LoginServiceImpl 
@@ -24,11 +24,11 @@ public class LoginServiceImpl implements LoginService {
 	
 	/**
 	 * 根據查詢結果返回是真假
+	 * @throws IOException 
 	 */
 	public boolean query(String _value,HttpSession session) {
 		try {
-			String[] dec = new BASE64Encoder().encode(_value.getBytes("utf-8")).split(":");
-			//String dec[] = new String (Base64.decodeBase64(_value.getBytes("utf-8"))).split(":");
+			String[] dec = new String(new BASE64Decoder().decodeBuffer(_value)).split(":");
 			Admin admin = new Admin();
 			admin.setUsername(dec[0]);
 			admin.setPassword(dec[1]);
@@ -42,7 +42,7 @@ public class LoginServiceImpl implements LoginService {
 				return false;
 			}
 			session.setAttribute("user", _admin);
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return true;
