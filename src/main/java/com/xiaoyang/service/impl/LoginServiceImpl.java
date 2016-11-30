@@ -5,12 +5,13 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoyang.dao.LoginDao;
 import com.xiaoyang.entity.Admin;
+
+import sun.misc.BASE64Encoder;
 
 /** 
 * @ClassName: LoginServiceImpl 
@@ -26,7 +27,8 @@ public class LoginServiceImpl implements LoginService {
 	 */
 	public boolean query(String _value,HttpSession session) {
 		try {
-			String dec[] = new String (Base64.decodeBase64(_value.getBytes("utf-8"))).split(":");
+			String[] dec = new BASE64Encoder().encode(_value.getBytes("utf-8")).split(":");
+			//String dec[] = new String (Base64.decodeBase64(_value.getBytes("utf-8"))).split(":");
 			Admin admin = new Admin();
 			admin.setUsername(dec[0]);
 			admin.setPassword(dec[1]);
