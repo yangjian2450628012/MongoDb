@@ -31,7 +31,7 @@
     <mongo:mongo id="mongodb" host="Host00155d9b0605" port="12345">
         <mongo:options/>
     </mongo:mongo>
-    <mongo:db-factory dbname="mongodbDemo" mongo-ref="mongodb"/>
+    <mongo:db-factory dbname="NICEOA" mongo-ref="mongodb"/>
 
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
