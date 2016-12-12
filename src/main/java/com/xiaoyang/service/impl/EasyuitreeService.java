@@ -19,4 +19,6 @@ public interface EasyuitreeService {
 	List<Menu> queryById(String id);
 
 	int updateAuth(String _id, String authmenu, String secondMenu);
+	
+	Admin editUse(String _id);
 }

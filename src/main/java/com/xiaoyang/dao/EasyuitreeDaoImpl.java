@@ -65,8 +65,11 @@ public class EasyuitreeDaoImpl implements EasyuitreeDao{
 			Pattern pattern= Pattern.compile("^.*"+admin.getName()+".*$", Pattern.CASE_INSENSITIVE);
 			query.addCriteria(Criteria.where("name").regex(pattern));
 		}
-		query.skip((page-1)*pageSize); //从第几条开始显示
-		query.limit(pageSize);//一页显示多少条数据
+		if(page !=0 &&  pageSize !=0 ){ //当等于零是默认查询全部
+			query.skip((page-1)*pageSize); //从第几条开始显示
+			query.limit(pageSize);//一页显示多少条数据
+		}
+		
 		Sort sort = new Sort("createtime");
 		query.with(sort);
 		
@@ -114,5 +117,28 @@ public class EasyuitreeDaoImpl implements EasyuitreeDao{
 		update.set("secondMenu", JSONArray.fromObject(secondMenu));
 		update.set("name", "人事部小杨");
 		return mongoTemplate.upsert(new Query(Criteria.where("_id").is(_id)), update, Admin.class).getN();
+	}
+
+	/**
+	 * 查询用户
+	 */
+	public Admin editUse(String _id) {
+		//查询_id = _id 的九个字段
+		DBObject dbObject = new BasicDBObject();
+		dbObject.put("_id", _id);
+		DBObject fieldObject = new BasicDBObject();
+		fieldObject.put("_id", 1);
+		fieldObject.put("username", 1);
+		fieldObject.put("password", 1);
+		fieldObject.put("createtime", 1);
+		fieldObject.put("dept", 1);
+		fieldObject.put("organization", 1);
+		fieldObject.put("job", 1);
+		fieldObject.put("name", 1);
+		fieldObject.put("picurePath", 1);
+		
+		Query query = new BasicQuery(dbObject, fieldObject);
+		
+		return this.mongoTemplate.findOne(query, Admin.class);
 	}
 }

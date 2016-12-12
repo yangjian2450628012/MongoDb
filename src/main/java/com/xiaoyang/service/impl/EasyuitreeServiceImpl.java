@@ -58,5 +58,8 @@ public class EasyuitreeServiceImpl implements EasyuitreeService {
 		return this.easyuitreeDao.updateAuth(_id, authmenu, secondMenu);
 	}
 
+	public Admin editUse(String _id) {
+		return this.easyuitreeDao.editUse(_id);
+	}
 	
 }

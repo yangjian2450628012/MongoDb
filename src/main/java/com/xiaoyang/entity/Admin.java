@@ -12,10 +12,17 @@ public class Admin {
 	private String dept;
 	private String organization;
 	private String job;
-	private String authmenu;
 	private String name;
+	private String picurePath;
+	private String authmenu;
 	private String secondMenu;
 	
+	public String getPicurePath() {
+		return picurePath;
+	}
+	public void setPicurePath(String picurePath) {
+		this.picurePath = picurePath;
+	}
 	public String get_id() {
 		return _id;
 	}

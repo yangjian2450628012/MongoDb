@@ -2,11 +2,11 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.yn</groupId>
-  <artifactId>MongDB</artifactId>
+  <artifactId>NICEOA</artifactId>
   <packaging>war</packaging>
   
   <version>0.0.1-SNAPSHOT</version>
-  <name>MongDB Maven Webapp</name>
+  <name>NICEOA Maven Webapp</name>
   <url>http://maven.apache.org</url> 
  
  <properties>
@@ -109,6 +109,12 @@
 			<scope>provided</scope>
 		</dependency>
         
+        <!-- 导出excel  -->	
+    <dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi</artifactId>
+    <version>3.9</version>
+</dependency> 
     </dependencies>
   
   <build>  
@@ -123,6 +129,9 @@
 					<path>/</path>
 				</configuration>
 			</plugin>
+			
+			<!-- 导出依赖jar包 -->
+			
 		</plugins>
     </build>  
 </project>

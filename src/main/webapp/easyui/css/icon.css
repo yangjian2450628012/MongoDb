@@ -143,5 +143,6 @@
 .icon-left_arrow{
 	background:url('icons/left_arrow.png') no-repeat center center;
 }
-
-
+.icon-downloadExcel {
+    background: url('icons/downloadExcel.png') no-repeat center center;
+}

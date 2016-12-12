@@ -4,8 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +58,27 @@ public class ManagerController {
 			return "userinfo";
 		}else
 		{
+			log.error("你不是管理员,没有权限访问!");
 			throw new Exception("你不是管理员,没有权限访问!");
+		}
+	}
+	
+	/**
+	 * 新增、修改用户界面初始化
+	 * @param _id
+	 * @return
+	 */
+	@RequestMapping(value="/toAddModifyUse",method=RequestMethod.GET)
+	public ModelAndView toEditUsePage(@RequestParam(value="_id") String _id){
+		if(StringUtils.isEmpty(_id))//id为空直接跳转到界面
+		{ 
+			return new ModelAndView("editUse");
+		}
+		else
+		{
+			ModelAndView modelAdnView = new ModelAndView("editUse");
+			modelAdnView.addObject("Admin", this.easyuitreeService.editUse(_id));
+			return modelAdnView;
 		}
 	}
 	
@@ -75,6 +97,7 @@ public class ManagerController {
 			return "menuInfo";
 		}else
 		{
+			log.error("你不是管理员,没有权限访问!");
 			throw new Exception("你不是管理员,没有权限访问!");
 		}
 	}

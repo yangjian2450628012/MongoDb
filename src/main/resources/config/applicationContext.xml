@@ -28,7 +28,7 @@
     </bean>
 
 	<!-- 虚拟机hostname ：Host00155d9b0605 -->
-    <mongo:mongo id="mongodb" host="Host00155d9b0605" port="12345">
+    <mongo:mongo id="mongodb" host="192.168.1.105" port="12345">
         <mongo:options/>
     </mongo:mongo>
     <mongo:db-factory dbname="NICEOA" mongo-ref="mongodb"/>

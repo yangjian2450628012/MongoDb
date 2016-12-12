@@ -13,9 +13,10 @@ var userinfo = {
 			userinfo._datagrid();
 		},
 		_datagrid : function(){
-			var toolbar=[{iconCls: 'icon-add',handler: function(){onMkhz();},text : '新增'},'-',
-			             {iconCls: 'icon-edit',handler: function(){onXtyx();},text : '修改'},'-',
-			             {iconCls: 'icon-cancel',handler: function(){onFzgshz();},text : '删除'}];
+			var toolbar=[{iconCls: 'icon-add',handler: function(){userinfo.onAddModifyUse(1);},text : '新增'},'-',
+			             {iconCls: 'icon-edit',handler: function(){userinfo.onAddModifyUse(2);},text : '修改'},'-',
+			             {iconCls: 'icon-cancel',handler: function(){userinfo.onDeleteUse();},text : '删除'},'-',
+			             {iconCls: 'icon-downloadExcel',handler: function(){userinfo.onExportExcelUse();},text : '导出excel'}];
 			$("#user-datagrid").datagrid({
 				columns :[[{field : "_id",checkbox : true,width : userinfo.cWidth*0.01},
 				        {field : 'username',title : '用户名',width : userinfo.cWidth*0.13,halign : 'center'},
@@ -44,7 +45,12 @@ var userinfo = {
 			$("#userform").form("clear");
 		},
 		url:{
-			_datagridUrl:contextPath+"/manager/getUserManagerDatas"
+			_datagridUrl:contextPath+"/manager/getUserManagerDatas",
+			_authManagerUrl:contextPath+"/manager/toMenuAuth",
+			_authManagerSaveUrl:contextPath+"/manager/saveAuth",
+			_onAddModifyUseUrl:contextPath+"/manager/toAddModifyUse",
+			_onExportExcelUseUrl:contextPath+"/export/exportExcelUse"
+			
 		},managerOrganization:function(options){
 			if(options=="1")return "总经理办公室";
 			else if(options=="0")return "管理员";
@@ -64,7 +70,7 @@ var userinfo = {
 				title:"菜单权限",
 				closed:true,
 				id:"authManmger",
-				url:contextPath+"/manager/toMenuAuth?_id="+value,
+				url:userinfo.url._authManagerUrl+"?_id="+value,
 				save:function(){
 					var treeObj = $.fn.zTree.getZTreeObj("treeM");
 					var nodes = treeObj.getNodes();
@@ -105,7 +111,7 @@ var userinfo = {
 						}
 					}
 					$.messager.progress({title : "温馨提示",msg : "请稍后，正在处理......"});
-					$.post(contextPath+"/manager/saveAuth", { "authmenu": JSON.stringify(authmenu),"secondMenu":JSON.stringify(secondMenu),"_id": $("#treeM").attr("userid")},
+					$.post(userinfo.url._authManagerSaveUrl, { "authmenu": JSON.stringify(authmenu),"secondMenu":JSON.stringify(secondMenu),"_id": $("#treeM").attr("userid")},
 							  function(result){
 						$.messager.progress("close");
 								if(result.status){
@@ -116,6 +122,22 @@ var userinfo = {
 								}
 						}
 					,"json");
+				}
+			});
+		},onAddModifyUse:function(type){
+			var _id = "";
+			if(type==2){var rows = $("#user-datagrid").datagrid("getSelected");if(rows==null)return; _id= rows._id;};
+			userinfo.openDialog({ //调用公共openDialog
+				width:550,
+				height:500,
+				modal:true,
+				maximizable:true,
+				title:type==1?"新增用户":"修改用户",
+				closed:true,
+				id:"addModifyUse",
+				url:userinfo.url._onAddModifyUseUrl+"?_id="+_id,
+				save:function(){ //保存数据
+					alert("保存数据");
 				}
 			});
 		},openDialog:function(options){
@@ -162,6 +184,35 @@ var userinfo = {
 				"job" : $("input[name=job]").val(),
 				"name" : $("input[name=name]").val()
 			});
+		},onExportExcelUse:function(){ //导出excel，创建form表单，用post方式导出excel
+			var submitForm = document.createElement( "FORM" );
+			submitForm.action = userinfo.url._onExportExcelUseUrl;
+			submitForm.method = "POST";
+			
+			//通过反射调用use查询的服务类
+//			userinfo.createNewFormElement( submitForm, "className", "com.xiaoyang.service.impl.EasyuitreeServiceImpl" );
+//			userinfo.createNewFormElement( submitForm, "methodName", "queryManagerAll" );
+			userinfo.createNewFormElement( submitForm, "username", $("input[name=username]").val() );
+			userinfo.createNewFormElement( submitForm, "dept", $("#dept").combobox("getValue") );
+			userinfo.createNewFormElement( submitForm, "job", $("input[name=job]").val() );
+			userinfo.createNewFormElement( submitForm, "name", $("input[name=name]").val() );
+			
+//			submitForm.appendChild($("input[name=username]")[0]);
+//			submitForm.appendChild($("#dept")[0]);
+//			submitForm.appendChild($("input[name=job]")[0]);
+//			submitForm.appendChild($("input[name=name]")[0]);
+			
+			document.body.appendChild( submitForm );
+			submitForm.submit();
+			submitForm.parentNode.removeChild( submitForm );
+		},createNewFormElement:function( inputForm, elementName, elementValue){//创建input，装数据用于form提交
+			var newElement = document.createElement( "INPUT" );
+			newElement.name = elementName;
+			newElement.id = elementName;
+			newElement.type = "hidden";
+			inputForm.appendChild( newElement );
+			newElement.value = elementValue;
+			return newElement;
 		}
 };
 //加载JS完执行userinfo.init

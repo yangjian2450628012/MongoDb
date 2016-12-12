@@ -81,7 +81,7 @@ public class ValidateCodeUtil {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < codeCount; i++) {
 			String codeS = String.valueOf(codespace[random.nextInt(codespace.length)]);
-			graphics2d.setColor(new Color(random.nextInt(255), random.nextInt(255), random.nextInt(255)));
+			graphics2d.setColor(new Color(random.nextInt(100), random.nextInt(100), random.nextInt(100)));
 			graphics2d.drawString(codeS, (i+1)*x, codeY);
 			sb.append(codeS);
 		}
