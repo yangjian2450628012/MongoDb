@@ -23,7 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.xiaoyang.entity.Admin;
 import com.xiaoyang.entity.Menu;
-import com.xiaoyang.service.impl.EasyuitreeService;
+import com.xiaoyang.service.impl.AdminService;
 import com.xiaoyang.util.EasyuiResult;
 
 /** 
@@ -36,7 +36,7 @@ public class ManagerController {
 	private Logger log = LoggerFactory.getLogger(ManagerController.class);
 	
 	@Autowired
-	private EasyuitreeService easyuitreeService;
+	private AdminService easyuitreeService;
 	
 	@RequestMapping(value="/thrid",method=RequestMethod.GET)
 	public String toIndex(Model model){

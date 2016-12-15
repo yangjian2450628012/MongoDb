@@ -146,3 +146,11 @@
 .icon-downloadExcel {
     background: url('icons/downloadExcel.png') no-repeat center center;
 }
+/**上移*/
+.icon-arrow-up {
+    background: url('icons/arrow_up.png') no-repeat !important;
+}
+/**下移*/
+.icon-arrow-down {
+    background: url('icons/arrow_down.png') no-repeat !important;
+}

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.xiaoyang.entity.JsonTreeData;
-import com.xiaoyang.service.impl.EasyuitreeService;
+import com.xiaoyang.service.impl.AdminService;
 
 /** 
 * @ClassName: TreeController 
@@ -22,7 +22,7 @@ import com.xiaoyang.service.impl.EasyuitreeService;
 public class TreeController {
 
 	@Autowired
-	private EasyuitreeService easyuitreeService;
+	private AdminService easyuitreeService;
 	
 	@RequestMapping(value="/tree",method=RequestMethod.POST,produces="text/html;charset=UTF-8")
 	@ResponseBody

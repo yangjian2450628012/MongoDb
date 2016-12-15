@@ -16,7 +16,9 @@ var userinfo = {
 			var toolbar=[{iconCls: 'icon-add',handler: function(){userinfo.onAddModifyUse(1);},text : '新增'},'-',
 			             {iconCls: 'icon-edit',handler: function(){userinfo.onAddModifyUse(2);},text : '修改'},'-',
 			             {iconCls: 'icon-cancel',handler: function(){userinfo.onDeleteUse();},text : '删除'},'-',
-			             {iconCls: 'icon-downloadExcel',handler: function(){userinfo.onExportExcelUse();},text : '导出excel'}];
+			             {iconCls: 'icon-downloadExcel',handler: function(){userinfo.onImportExcelUse();},text : '导入'},'-',
+			             {iconCls: 'icon-downloadExcel',handler: function(){userinfo.onExportExcelUse();},text : '导出'},'-',
+			             {iconCls: 'icon-downloadExcel',handler: function(){userinfo.onDownloadExcel();},text : '下载模板'}];
 			$("#user-datagrid").datagrid({
 				columns :[[{field : "_id",checkbox : true,width : userinfo.cWidth*0.01},
 				        {field : 'username',title : '用户名',width : userinfo.cWidth*0.13,halign : 'center'},
@@ -49,8 +51,9 @@ var userinfo = {
 			_authManagerUrl:contextPath+"/manager/toMenuAuth",
 			_authManagerSaveUrl:contextPath+"/manager/saveAuth",
 			_onAddModifyUseUrl:contextPath+"/manager/toAddModifyUse",
-			_onExportExcelUseUrl:contextPath+"/export/exportExcelUse"
-			
+			_onExportExcelUseUrl:contextPath+"/export/exportExcelUse",
+			_onImportExcelUseUrl:contextPath+"/import/downloadExcel",
+			_importExcelUrl:contextPath+"/import/importExcel"
 		},managerOrganization:function(options){
 			if(options=="1")return "总经理办公室";
 			else if(options=="0")return "管理员";
@@ -184,7 +187,119 @@ var userinfo = {
 				"job" : $("input[name=job]").val(),
 				"name" : $("input[name=name]").val()
 			});
+		},uploadFileForm:function(options){
+			var html = "<form id=\"importFileForm\" method=\"post\" enctype=\"multipart/form-data\">";
+			html += "<table style=\"margin:5px;height:70px;\">";
+			html += "<tr>";
+			html += "<td>请选择文件</td>";
+			html += "<td width=\"5px;\"></td>";
+			html += "<td><input class=\"easyui-filebox\" data-options=\"prompt:'点击选择文件...',onChange:function(){"+options.fileChangeMethod+";}\" id=\"fileImport\" name=\"fileImport\" style=\"width:260px;\"></td>";
+			html += "<td></td></tr>";
+			html += "<tr>";
+			html += "<td colspan=\"4\"><label id=\"fileName\" isCanUpolad='false' /></td>";
+			html += "</tr>";
+			html += "<tr>";
+			html += "<td colspan=\"4\">";
+			html += "<label id=\"uploadInfo\" />";
+			html += "</td>";
+			html += "</tr>";
+			html += "</table><div style=\"text-align:center;clear:both;margin:5px;\">";
+			html += "<a id=\"uploadFile\" style=\"margin-left:5px;\" class=\"easyui-linkbutton\" data-options=\"iconCls:'icon-ok'\" onclick=\"javascript:"+options.uploadMethodName+";\" >上传</a>";
+			html += "<a class=\"easyui-linkbutton\" style=\"margin-left:5px;\" data-options=\"iconCls:'icon-cancel'\" onclick=\"javascript:$('#"+options.id+"').window('close');\" >关闭</a>";
+			html += "</div>"
+			html += "</form>";
+			return html;
+		},importFileClick:function(){ //实现导入功能
+			if(document.getElementById('fileName').getAttribute("isCanUpolad") == "false")
+			{
+				document.getElementById('fileName').innerHTML = "<span style='color:Red'>错误提示:错误，请上传文件!</span>";
+				return;
+			}
+			var formData = new FormData($("#importFileForm")[0]);
+			$.ajax({
+				url: userinfo.url._importExcelUrl,
+                type: 'POST',
+                data: formData,
+                async: false,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (result) {
+                	if(result.success){
+                		$.messager.show({title:'温馨提示',msg:result.msg,timeout:1000,showType:'show'});
+                		$('#importExcelWin').window('close');
+                		$('#user-datagrid').datagrid("reload");
+                	}else{
+                		document.getElementById('uploadInfo').innerHTML = "<span style='color:Red'>错误提示:" + result.msg + "</span>";
+                	}
+                },
+                error: function (result) {
+                    document.getElementById('uploadInfo').innerHTML = "<span style='color:Red'>错误提示:" + result.msg + "</span>";
+                }
+			});
+		},fileUploadChange:function(){
+			var file = document.getElementsByName("fileImport")[0].files[0];
+			if(file == null ) {
+				document.getElementById('fileName').innerHTML = "<span style='color:Red'>错误提示:错误，请上传文件!</span>";
+				return;
+			}
+			var fileName = file.name;
+			var file_typename = fileName.substring(fileName.lastIndexOf('.'),fileName.length);
+			if(file_typename == ".xls" || file_typename == ".xlsx"){
+				var fileSize = 0;
+				//计算文件的大小
+				if(file.size > 1024*1024){
+					fileSize = Math.round(file.size * 100 / (1024 * 1024)) / 100;
+					if(fileSize > 10 ){ //大于10M，禁止上传
+						document.getElementById('fileName').setAttribute("isCanUpolad","false"); 
+						document.getElementById('fileName').innerHTML = "<span style='color:Red'>错误提示:错误，文件超过10M，禁止上传!</span>";
+						return;
+					}
+					fileSize = fileSize.toString() + 'MB';
+				}else{
+					fileSize = Math.round(file.size * 100 / (1024)) / 100 + 'KB';
+				}
+				document.getElementById('fileName').setAttribute("isCanUpolad","true"); 
+				document.getElementById('fileName').innerHTML = "<span style='color:blue;'>文件名: " + file.name + ',大小: ' + fileSize + "</span>";
+			}else{
+				document.getElementById('fileName').setAttribute("isCanUpolad","false");
+	            document.getElementById('fileName').innerHTML = "<span style='color:Red'>错误提示:上传文件应该是.xlsx或.xls后缀,而不应该是" + file_typename + ",请重新选择文件</span>";
+			}
+		},onImportExcelUse:function(){ //导入excel
+			$(document.body).append("<div id='importExcelWin' class='easyui-window'></div>");
+			$('#importExcelWin').window({    
+			    width:400,    
+			    height:160,    
+			    modal:true,
+			    title:'文件上传',
+			    closed:true,
+			    content:userinfo.uploadFileForm({id:'importExcelWin',uploadMethodName:'userinfo.importFileClick()',fileChangeMethod:'userinfo.fileUploadChange()'}),
+			    minimizable:false,
+			    maximizable:false
+			});
+			 $('#importExcelWin').window('open');
+		},onDownloadExcel:function(){ //下载模板，用户导入excel
+			var deptData = new Array();
+			var organizationData = new Array();
+			for (var int = 0,deptOptins = document.getElementById("dept").options; int < deptOptins.length; int++) {
+				if(deptOptins[int].innerText == "全部")continue;
+				deptData.push(deptOptins[int].innerText);
+				organizationData.push(deptOptins[int].innerText);
+			}
+			var submitForm = document.createElement( "FORM" );
+			submitForm.action = userinfo.url._onImportExcelUseUrl;
+			submitForm.method = "POST";
+			
+			userinfo.createNewFormElement( submitForm, "fieldName", userinfo.getColumnsFidleTitle('user-datagrid')[0] );
+			userinfo.createNewFormElement( submitForm, "depts", deptData );
+			userinfo.createNewFormElement( submitForm, "organizations", organizationData );
+			
+			document.body.appendChild( submitForm );
+			submitForm.submit();
+			submitForm.parentNode.removeChild( submitForm );
 		},onExportExcelUse:function(){ //导出excel，创建form表单，用post方式导出excel
+			var optionsField = userinfo.getColumnsFidleTitle('user-datagrid');
+			
 			var submitForm = document.createElement( "FORM" );
 			submitForm.action = userinfo.url._onExportExcelUseUrl;
 			submitForm.method = "POST";
@@ -196,6 +311,8 @@ var userinfo = {
 			userinfo.createNewFormElement( submitForm, "dept", $("#dept").combobox("getValue") );
 			userinfo.createNewFormElement( submitForm, "job", $("input[name=job]").val() );
 			userinfo.createNewFormElement( submitForm, "name", $("input[name=name]").val() );
+			userinfo.createNewFormElement( submitForm, "fieldName", optionsField[0] );
+			userinfo.createNewFormElement( submitForm, "field", optionsField[1] );
 			
 //			submitForm.appendChild($("input[name=username]")[0]);
 //			submitForm.appendChild($("#dept")[0]);
@@ -208,11 +325,21 @@ var userinfo = {
 		},createNewFormElement:function( inputForm, elementName, elementValue){//创建input，装数据用于form提交
 			var newElement = document.createElement( "INPUT" );
 			newElement.name = elementName;
-			newElement.id = elementName;
+			//newElement.id = elementName;
 			newElement.type = "hidden";
 			inputForm.appendChild( newElement );
 			newElement.value = elementValue;
 			return newElement;
+		},getColumnsFidleTitle:function(id){
+			var options = $("#"+id).datagrid("options");
+			//修改属性
+			var fieldName = new Array();
+			var field = new Array();
+			for (var int = 0; int < options.columns[0].length; int++) {
+				fieldName.push(options.columns[0][int].title);
+				field.push(options.columns[0][int].field);
+			}
+			return new Array(fieldName,field);
 		}
 };
 //加载JS完执行userinfo.init

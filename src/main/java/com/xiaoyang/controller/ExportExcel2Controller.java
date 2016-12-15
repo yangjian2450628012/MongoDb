@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.xiaoyang.entity.Admin;
-import com.xiaoyang.service.impl.EasyuitreeService;
+import com.xiaoyang.service.impl.AdminService;
 import com.xiaoyang.util.ExportExcelUtil;
 
 /** 
@@ -26,7 +26,7 @@ import com.xiaoyang.util.ExportExcelUtil;
 @RequestMapping("/excel")
 public class ExportExcel2Controller extends ExportExcelUtil{
 	@Autowired
-	private EasyuitreeService easyuitreeservice;
+	private AdminService easyuitreeservice;
 	private Admin admin;
 	
 	@Override

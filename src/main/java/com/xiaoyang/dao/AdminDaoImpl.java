@@ -26,7 +26,7 @@ import net.sf.json.JSONArray;
 * @ClassName: EasyuitreeDaoImpl 
 */
 @Repository
-public class EasyuitreeDaoImpl implements EasyuitreeDao{
+public class AdminDaoImpl implements AdminDao{
 	
 	@Autowired
 	private MongoTemplate mongoTemplate;
@@ -140,5 +140,12 @@ public class EasyuitreeDaoImpl implements EasyuitreeDao{
 		Query query = new BasicQuery(dbObject, fieldObject);
 		
 		return this.mongoTemplate.findOne(query, Admin.class);
+	}
+
+	/**
+	 * 批量保存数据
+	 */
+	public void insertAdmin(List<Admin> list) {
+		this.mongoTemplate.insert(list, Admin.class);
 	}
 }

@@ -27,8 +27,15 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
+	<!-- 配置文件上传解析器 ,支持上传10M-->
+	<!-- 需要设置id=multipartResolver -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="maxUploadSize" value="10485760"></property>
+	</bean>
+	
 	<!-- 虚拟机hostname ：Host00155d9b0605 -->
-    <mongo:mongo id="mongodb" host="192.168.1.105" port="12345">
+    <mongo:mongo id="mongodb" host="192.168.155.9" port="12345">
         <mongo:options/>
     </mongo:mongo>
     <mongo:db-factory dbname="NICEOA" mongo-ref="mongodb"/>

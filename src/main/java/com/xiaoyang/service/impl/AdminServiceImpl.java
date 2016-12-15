@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.xiaoyang.dao.EasyuitreeDao;
+import com.xiaoyang.dao.AdminDao;
 import com.xiaoyang.entity.Admin;
 import com.xiaoyang.entity.JsonTreeData;
 import com.xiaoyang.entity.Menu;
@@ -18,10 +18,10 @@ import com.xiaoyang.util.TreeNodeUtil;
 * @ClassName: EasyuitreeServiceImpl 
 */
 @Repository
-public class EasyuitreeServiceImpl implements EasyuitreeService {
+public class AdminServiceImpl implements AdminService {
 
 	@Autowired
-	private EasyuitreeDao easyuitreeDao; 
+	private AdminDao easyuitreeDao; 
 	
 	/* (non-Javadoc)
 	 * @see com.xiaoyang.service.impl.EasyuitreeService#queryAll()
@@ -60,6 +60,13 @@ public class EasyuitreeServiceImpl implements EasyuitreeService {
 
 	public Admin editUse(String _id) {
 		return this.easyuitreeDao.editUse(_id);
+	}
+
+	/**
+	 * 批量保存数据
+	 */
+	public void insertAdmin(List<Admin> list) {
+		this.easyuitreeDao.insertAdmin(list);
 	}
 	
 }

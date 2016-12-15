@@ -10,7 +10,7 @@ import com.xiaoyang.util.EasyuiResult;
 /** 
 * @ClassName: EasyuitreeService 
 */
-public interface EasyuitreeService {
+public interface AdminService {
 
 	List<JsonTreeData> queryAll();
 	
@@ -21,4 +21,6 @@ public interface EasyuitreeService {
 	int updateAuth(String _id, String authmenu, String secondMenu);
 	
 	Admin editUse(String _id);
+	
+	void insertAdmin(List<Admin> list);
 }

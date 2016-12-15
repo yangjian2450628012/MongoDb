@@ -10,7 +10,7 @@ import com.xiaoyang.util.EasyuiResult;
 /** 
 * @ClassName: EasyuitreeDao 
 */
-public interface EasyuitreeDao {
+public interface AdminDao {
 
 	List<Trees> queryAll();
 	
@@ -21,6 +21,12 @@ public interface EasyuitreeDao {
 	int updateAuth(String _id, String authmenu, String secondMenu);
 	
 	Admin editUse(String _id);
+
+	/**
+	 * @param list
+	 * @return
+	 */
+	void insertAdmin(List<Admin> list);
 }
 
 

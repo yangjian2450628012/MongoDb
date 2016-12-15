@@ -18,22 +18,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.xiaoyang.entity.Admin;
-import com.xiaoyang.service.impl.EasyuitreeService;
+import com.xiaoyang.service.impl.AdminService;
 import com.xiaoyang.util.EasyuiResult;
 
 @Controller
 @RequestMapping("/export")
 public class ExportExcelCommController {
 	@Autowired
-	private EasyuitreeService easyuitreeservice;
+	private AdminService easyuitreeservice;
 	
 	@RequestMapping(value="/exportExcelUse",method=RequestMethod.POST)
-	public void exportExcelUse(@ModelAttribute Admin admin,HttpServletResponse response){
+	public void exportExcelUse(@ModelAttribute Admin admin,@RequestParam(value="fieldName")String[] cellName,@RequestParam(value="field")String[] field, HttpServletResponse response){
 		try {
 			//通过反射调用查询
 			EasyuiResult result = this.easyuitreeservice.queryManagerAll(0, 0, admin); //默认查询出复合条件的所有数据
+			@SuppressWarnings("unchecked")
 			List<Admin> list = (List<Admin>)result.getRows();
 			CellStyle cellStyle;
 			
@@ -41,16 +43,22 @@ public class ExportExcelCommController {
 			HSSFSheet sheet = workbook.createSheet("sheet1");
 			HSSFRow row = sheet.createRow(0);//创建一行:列头
 			
-			String[] cellName = new String[]{"用户名","创建时间","员工姓名","所属部门","上级部门","职位"};
-			String[] field = new String[]{"username","createtime","name","dept","organization","job"};
+			/*String[] cellName = new String[]{"用户名","创建时间","员工姓名","所属部门","上级部门","职位"};
+			String[] field = new String[]{"username","createtime","name","dept","organization","job"};*/
 			
 			for (int i = 0; i < cellName.length; i++) { //给列头添加名称
+				if("菜单权限".equals(cellName[i])){
+					continue;
+				}
 				HSSFCell cell = row.createCell(i); //列
 				cellStyle = workbook.createCellStyle(); //创建样式
 				cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 				
 				cell.setCellStyle(cellStyle);
-				cell.setCellValue(new HSSFRichTextString(cellName[i]));
+				if("".equals(cellName[i]))
+					cell.setCellValue(new HSSFRichTextString("用户编号"));
+				else
+					cell.setCellValue(new HSSFRichTextString(cellName[i]));
 				sheet.setColumnWidth(i, 5000);
 				
 			}
@@ -79,6 +87,9 @@ public class ExportExcelCommController {
 				else if("1_116".equals(_admin.getOrganization()))_admin.setOrganization( "后勤部门");
 				
 				for (int j = 0; j < field.length; j++) {
+					if("auth".equals(field[j])){
+						continue;
+					}
 					HSSFCell cell = _row.createCell(j);
 					cellStyle = workbook.createCellStyle(); //创建样式
 					cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
