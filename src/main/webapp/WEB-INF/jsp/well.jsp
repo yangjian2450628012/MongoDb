@@ -84,44 +84,50 @@
 	</div>   
     <div id="west-div"  data-options="region:'center'">
     	<div id="_tabs">
-			<div title="我的桌面" iconCls="icon-house" style=" display:block;">
+			<div title="我的桌面" iconCls="icon-house" style=" display:block;padding: 5px;">
 				<!-- 欢迎来到后台管理系统！ -->
 				<div class="easyui-layout" data-options="border:false,fit:true">
+					<div data-options="region:'north'" style="height:32px;">
+						<div style="float:right;margin:4px 5px 0 0">
+							<input class="easyui-searchbox" prompt="Please input value" style="width:300px">
+						</div>
+						<div style="padding:2px 5px;">
+							<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-add'">发启流程</a>
+							<span class="datagrid-btn-separator" style="vertical-align: middle; display:inline-block;float:none"></span>
+							<a href="#" class="easyui-splitbutton" data-options="iconCls:'icon-tip'">代办事项</a>
+							<span class="datagrid-btn-separator" style="vertical-align: middle; display:inline-block;float:none"></span>
+							<a href="#" class="easyui-menubutton" data-options="iconCls:'icon-tip'">待审批</a>
+							<span class="datagrid-btn-separator" style="vertical-align: middle; display:inline-block;float:none"></span>
+							<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save',toggle:true">Save</a>
+							<span class="datagrid-btn-separator" style="vertical-align: middle; display:inline-block;float:none"></span>
+							<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-print'">Print</a>
+						</div>
+					</div> 
 					<div region="center" border="false" >
+						
 						<div id="mydeksot" style="position:relative">
 							<div style="width:30%;">
-								<div title="Clock" style="text-align:center;height:150px;">
+								<div title="个人信息" iconCls="icon-man" collapsible="true" closable="true" style="text-align:center;height:200px;">
 									
 							    </div>
-							    <div title="Tutorials" collapsible="true" closable="true" style="height:200px;">
+							    <div title="待办任务" collapsible="true" closable="true" iconCls="icon-myTask_yb" style="height:200px;">
 							   		
 							    </div>
 							</div>
 							<div style="width:40%;">
-								<div id="pgrid" title="DataGrid" closable="true" style="height:200px;">
-									<table class="easyui-datagrid" style="width:650px;height:auto"
-											fit="true" border="false"
-											singleSelect="true"
-											idField="itemid" url="datagrid_data.json">
-										<thead>
-											<tr>
-												<th field="itemid" width="60">Item ID</th>
-												<th field="productid" width="60">Product ID</th>
-												<th field="listprice" width="80" align="right">List Price</th>
-												<th field="unitcost" width="80" align="right">Unit Cost</th>
-												<th field="attr1" width="120">Attribute</th>
-												<th field="status" width="50" align="center">Status</th>
-											</tr>
-										</thead>
-									</table>
+								<div title="通知公告" closable="true" collapsible="true" iconCls="icon-speaker" style="height:200px;">
+									
 								</div>
+								<div title="待办流程" collapsible="true" closable="true" iconCls="icon-handleTask_db" style="height:200px;">
+							   		
+							    </div>
 							</div>
 							<div style="width:30%;">
-								<div title="Searching" iconCls="icon-search" closable="true" style="height:80px;">
-									<input class="easyui-searchbox">
+								<div title="工作日程" collapsible="true" closable="true" iconCls="icon-calendar" style="height:200px;">
+									<div class="easyui-calendar" id="job-calendar" data-options="fit:true,border:false"></div>
 								</div>
-								<div title="Graph" closable="true" style="height:200px;text-align:center;">
-									<img height="160" src=""></img>
+								<div title="待办会议" closable="true" collapsible="true" iconCls="icon-metting" style="height:200px;text-align:center;">
+									
 								</div>
 							</div>
 						</div>
