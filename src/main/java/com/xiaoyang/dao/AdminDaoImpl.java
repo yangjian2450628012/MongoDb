@@ -115,7 +115,7 @@ public class AdminDaoImpl implements AdminDao{
 		Update update = new Update();
 		update.set("authmenu", JSONArray.fromObject(authmenu));
 		update.set("secondMenu", JSONArray.fromObject(secondMenu));
-		update.set("name", "人事部小杨");
+//		update.set("name", "人事部小杨");
 		return mongoTemplate.upsert(new Query(Criteria.where("_id").is(_id)), update, Admin.class).getN();
 	}
 

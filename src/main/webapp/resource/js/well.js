@@ -187,8 +187,12 @@ var well = {
 			
 			/*一分钟调用一次更新时间*/
 			setInterval("well.show_cur_times()",1000);
-		},
-		_change : function(){
+			/*设置桌面*/
+			$('#mydeksot').portal({
+				border:false,
+				fit:true
+			});
+		},_change : function(){
 			/*更改框架皮肤*/
 			/*var theme = $("select[name=theme]").val();*/
 			var theme = $("#theme-id").combobox("getValue");

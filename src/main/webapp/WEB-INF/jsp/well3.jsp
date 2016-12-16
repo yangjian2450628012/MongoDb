@@ -84,48 +84,123 @@
 	</div>   
     <div id="west-div"  data-options="region:'center'">
     	<div id="_tabs">
-			<div title="我的桌面" iconCls="icon-house" style=" display:block;">
+			<div title="我的桌面" iconCls="icon-house" style="padding:5px; display:block;">
 				<!-- 欢迎来到后台管理系统！ -->
 				<div class="easyui-layout" data-options="border:false,fit:true">
-					<div region="center" border="false" >
-						<div id="mydeksot" style="position:relative">
-							<div style="width:30%;">
-								<div title="Clock" style="text-align:center;height:150px;">
-									
-							    </div>
-							    <div title="Tutorials" collapsible="true" closable="true" style="height:200px;">
-							   		
-							    </div>
-							</div>
-							<div style="width:40%;">
-								<div id="pgrid" title="DataGrid" closable="true" style="height:200px;">
-									<table class="easyui-datagrid" style="width:650px;height:auto"
-											fit="true" border="false"
-											singleSelect="true"
-											idField="itemid" url="datagrid_data.json">
-										<thead>
-											<tr>
-												<th field="itemid" width="60">Item ID</th>
-												<th field="productid" width="60">Product ID</th>
-												<th field="listprice" width="80" align="right">List Price</th>
-												<th field="unitcost" width="80" align="right">Unit Cost</th>
-												<th field="attr1" width="120">Attribute</th>
-												<th field="status" width="50" align="center">Status</th>
-											</tr>
-										</thead>
-									</table>
-								</div>
-							</div>
-							<div style="width:30%;">
-								<div title="Searching" iconCls="icon-search" closable="true" style="height:80px;">
-									<input class="easyui-searchbox">
-								</div>
-								<div title="Graph" closable="true" style="height:200px;text-align:center;">
-									<img height="160" src=""></img>
-								</div>
-							</div>
+					<div data-options="region:'north'" style="height:32px;">
+						<div style="float:right;margin:4px 5px 0 0">
+							<input class="easyui-searchbox" prompt="Please input value" style="width:300px">
 						</div>
-					</div>
+						<div style="padding:2px 5px;">
+							<a href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-add'">发启流程</a>
+							<span class="datagrid-btn-separator" style="vertical-align: middle; display:inline-block;float:none"></span>
+							<a href="#" class="easyui-splitbutton" data-options="iconCls:'icon-tip'">代办事项</a>
+							<span class="datagrid-btn-separator" style="vertical-align: middle; display:inline-block;float:none"></span>
+							<a href="#" class="easyui-menubutton" data-options="iconCls:'icon-tip'">待审批</a>
+							<span class="datagrid-btn-separator" style="vertical-align: middle; display:inline-block;float:none"></span>
+							<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save',toggle:true">Save</a>
+							<span class="datagrid-btn-separator" style="vertical-align: middle; display:inline-block;float:none"></span>
+							<a href="#" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-print'">Print</a>
+						</div>
+					</div>   
+				    <div data-options="region:'south',border:false" style="height:230px;padding-top:5px">
+				    	<div class="easyui-layout" data-options="border:false,fit:true">   
+						    <div data-options="region:'east',title:'代办会议',split:true,collapsible:false,iconCls:'icon-metting'" style="width:310px;">
+						    	<div class="metting-div db-div">
+									<ul>
+										<li>
+											<a title="公司改制调研情况通报" href="javascript:">公司改制调研情况通报</a>
+											<span>[2014-09-08]</span>
+										</li>
+									</ul>
+								</div>
+						    </div>   
+						    <div data-options="region:'west',split:true,collapsible:false" style="width:420px;"><!-- title:'代办任务',iconCls:'icon-myTask', -->
+						    	<div class="easyui-tabs"  data-options="border:false,fit:true">
+						    		<div title="代办任务" data-options="iconCls:'icon-myTask_db'">   
+    									<div class="myTask-div db-div">
+											<ul>
+												<li>
+													<a title="(超期)实施部署" href="javascript:">(超期)实施部署(郑智林)</a>
+													<span>[2016-01-01]</span>
+												</li>
+												<li>
+													<a title="(超期)文三路路段" href="javascript:">(超期)文三路路段(郑智林)</a>
+													<span>[2015-12-22]</span>
+												</li>
+												<li>
+													<a title="(超期)系统测试" href="javascript:">(超期)系统测试(郑智林)</a>
+													<span>[2015-12-18]</span>
+												</li>
+												<li>
+													<a title="(超期)编码实现" href="javascript:">(超期)编码实现(郑智林)</a>
+													<span>[2015-12-12]</span>
+												</li>
+												<li>
+													<a title="(超期)设计架构" href="javascript:">(超期)设计架构(郑智林)</a>
+													<span>[2015-11-28]</span>
+												</li>
+											</ul>
+										</div>
+    								</div>
+    								<div title="已办任务" data-options="iconCls:'icon-myTask_yb'">   
+    									<div class="myTask-div yb-div">
+											<ul>
+												<li>
+													<a title="(超期)实施部署" href="javascript:">(超期)实施部署(郑智林)</a>
+													<span>[2016-01-01]</span>
+												</li>
+												<li>
+													<a title="(超期)文三路路段" href="javascript:">(超期)文三路路段(郑智林)</a>
+													<span>[2015-12-22]</span>
+												</li>
+												<li>
+													<a title="(超期)系统测试" href="javascript:">(超期)系统测试(郑智林)</a>
+													<span>[2015-12-18]</span>
+												</li>
+											</ul>
+										</div>
+    								</div>
+						    	</div>
+						    </div>   
+						    <div data-options="region:'center'">
+						    	<div class="easyui-tabs"  data-options="border:false,fit:true">
+						    		<div title="代办流程" data-options="iconCls:'icon-handleTask_db'">
+						    			<div class="handleTask-div db-div">
+											<ul><li>
+												<a title="关于转知某某市公路局工程处第一届工会委员会选举结果的通知" href="javascript:">关于转知某某市公路局工程处第一...(潘宁)</a>
+												<span>[2015-05-01]</span>
+											</li>
+											<li>
+												<a title="请假申请单_2015-04-29_潘宁" href="javascript:">请假申请单_2015-04-2...(潘宁)</a>
+												<span>[2015-04-29]</span>
+											</li>
+											</ul>
+										</div> 
+						    		</div>
+						    		<div title="已办流程" data-options="iconCls:'icon-handleTask_yb'">
+						    			<div class="handleTask-div yb-div">
+											<ul>
+												<li>
+													<a title="关于转知某某市公路局工程处第一届工会委员会选举结果的通知" href="javascript:">关于转知某某市公路局工程处第一...(潘宁)</a>
+													<span>[2015-05-01]</span>
+												</li>
+											</ul>
+										</div> 
+						    		</div>
+						    	</div>
+						    </div>   
+						</div> 
+				    </div>   
+				    <div data-options="region:'east',title:'工作日程',split:true,iconCls:'icon-calendar',collapsible:false" style="width:310px;">
+				    	<div class="easyui-calendar" id="job-calendar" data-options="fit:true,border:false"></div>
+				    </div>  
+				    <div data-options="region:'west',split:true,title:'个人信息',collapsible:false,iconCls:'icon-man'" style="width:420px;">
+				    	
+				    </div>   
+				    <div data-options="region:'center',title:'通知公告',iconCls:'icon-speaker'" style="padding:5px;">
+				    	
+				    </div>
 				</div>
 			</div>
 		</div>
@@ -175,8 +250,7 @@ _h = null;
 <script type="text/javascript" src="<%=path %>/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="<%=path %>/easyui/jqueryZtree.js"></script>
 <script type="text/javascript" src="<%=path %>/easyui/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="<%=path %>/easyui/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="<%=path %>/easyui/jquery.portal.js"></script> 
+<script type="text/javascript" src="<%=path %>/easyui/easyui-lang-zh_CN.js"></script> 
 <script type="text/javascript" src="<%=path %>/resource/js/well.js"></script>
 <script type="text/javascript"> 
 var _da = {"个人":Array(),"通知":Array(),"流程":Array(),"文档":Array(),"报告":Array(),"项目":Array(),"资产":Array(),"人事":Array(),"客户":Array(),"采购":Array()};
