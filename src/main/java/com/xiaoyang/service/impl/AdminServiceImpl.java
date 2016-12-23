@@ -23,8 +23,8 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private AdminDao easyuitreeDao; 
 	
-	/* (non-Javadoc)
-	 * @see com.xiaoyang.service.impl.EasyuitreeService#queryAll()
+	/* *
+	 * 查询树形菜单
 	 */
 	public List<JsonTreeData> queryAll() {
 		List<Trees> list = this.easyuitreeDao.queryAll();

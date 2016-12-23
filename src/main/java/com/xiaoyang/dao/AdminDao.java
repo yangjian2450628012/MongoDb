@@ -27,6 +27,8 @@ public interface AdminDao {
 	 * @return
 	 */
 	void insertAdmin(List<Admin> list);
+	
+	void saveSigninAndOut(String time,String type,String user_id);
 }
 
 

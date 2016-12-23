@@ -220,3 +220,59 @@ float: left;color: #fff;font-size: 14px;margin-top: 55px;margin-left: 180px;
 .child-no-display a{
 	padding: 3px 20px 0px 20px;
 }
+.x-panel-noborder {
+    border: 0 none;
+}
+.x-column {
+	    float: left;
+	    padding: 0;
+	    margin: 0;
+	    overflow: hidden;
+	    zoom: 1;
+	}
+.x-panel-bwrap {
+    overflow: hidden;
+    zoom: 1;
+    left: 0;
+    top: 0;
+}
+
+#CNOA_MY_IMAGES {
+    display: block;
+    border: 1px solid #D4D5D7;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 50%;
+    height: 103px;
+    width: 108px;
+    position: relative;
+    margin-left: -63px;
+    left: 50%;
+    padding-top: 3px;
+}
+#CNOA_MY_NAME {
+    font-size: 30px;
+    height: 30px;
+    line-height: 30px;
+    color: #595757;
+    /*margin-top: 30p;*/
+}
+#CNOA_MY_DEPT {
+    font-size: 16px;
+    height: 30px;
+    line-height: 30px;
+    color: #888889;
+    /* margin-top: 30px; */
+    background-color: #EEEFEF;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+#CNOA_MY_SIGN {
+    font-size: 12px;
+    height: 30px;
+    line-height: 30px;
+    color: #ffffff;
+    margin-top: 30px;
+    background-color: #F39700;
+}

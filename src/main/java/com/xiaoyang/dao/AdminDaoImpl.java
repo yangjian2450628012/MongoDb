@@ -2,8 +2,10 @@ package com.xiaoyang.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,10 +15,13 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.xiaoyang.entity.Admin;
 import com.xiaoyang.entity.Menu;
+import com.xiaoyang.entity.Sign;
 import com.xiaoyang.entity.Trees;
 import com.xiaoyang.util.EasyuiResult;
 
@@ -147,5 +152,58 @@ public class AdminDaoImpl implements AdminDao{
 	 */
 	public void insertAdmin(List<Admin> list) {
 		this.mongoTemplate.insert(list, Admin.class);
+	}
+	
+	//保存签到签退数据
+	public void saveSigninAndOut(String time,String type,String user_id) {
+		DBObject dbObject = new BasicDBObject();
+		dbObject.put("user_id", user_id);
+		DBObject fieldObject = new BasicDBObject();
+		fieldObject.put("_id", 1);
+		fieldObject.put("signin", 1);
+		fieldObject.put("signout", 1);
+		
+		Query query = new BasicQuery(dbObject, fieldObject);
+		Sign sign = this.mongoTemplate.findOne(query, Sign.class);
+		
+		if(sign == null || StringUtils.isBlank(sign.get_id())){ //为空新增
+			List<Sign> list = new ArrayList<Sign>();
+			
+			sign = new Sign();
+			sign.setUser_id(user_id);
+			sign.set_id("SIGN-"+UUID.randomUUID().toString().split("-")[0]);
+			JSONArray jsonArray = new JSONArray();
+			jsonArray.add(time);
+			if(type.equals("signin")){
+				sign.setSignin(jsonArray.toString());
+			}
+			else if(type.equals("signOut")){
+				sign.setSignout(jsonArray.toString());
+			}
+			list.add(sign);
+			this.mongoTemplate.insert(list, Sign.class);
+		}else{ //更新
+			Update update = new Update();
+			if(type.equals("signin")){
+				JSONArray jsonArray;
+				if(sign.getSignin() !=null && !"".equals(sign.getSignin()))
+					jsonArray = JSONArray.fromObject(sign.getSignin());
+				else 
+					jsonArray = new JSONArray();
+				jsonArray.add(time);
+				update.set("signin", jsonArray.toString());
+			}
+			else if(type.equals("signOut")){
+				JSONArray jsonArray;
+				if(sign.getSignout() !=null && !"".equals(sign.getSignout()))
+					jsonArray = JSONArray.fromObject(sign.getSignout());
+				else
+					jsonArray = new JSONArray();
+				jsonArray.add(time);
+				update.set("signout", jsonArray.toString());
+			}
+			this.mongoTemplate.upsert(new Query(Criteria.where("user_id").is(user_id)), update, Sign.class);
+		}
+		
 	}
 }

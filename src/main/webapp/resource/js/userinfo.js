@@ -191,9 +191,8 @@ var userinfo = {
 			var html = "<form id=\"importFileForm\" method=\"post\" enctype=\"multipart/form-data\">";
 			html += "<table style=\"margin:5px;height:70px;\">";
 			html += "<tr>";
-			html += "<td>请选择文件</td>";
-			html += "<td width=\"5px;\"></td>";
-			html += "<td><input class=\"easyui-filebox\" data-options=\"prompt:'点击选择文件...',onChange:function(){"+options.fileChangeMethod+";}\" id=\"fileImport\" name=\"fileImport\" style=\"width:260px;\"></td>";
+			html += "<td>请选择文件:</td>";
+			html += "<td><input class=\"easyui-filebox\" data-options=\"prompt:'点击选择文件...',buttonText:'点击上传',onChange:function(){"+options.fileChangeMethod+";}\" id=\"fileImport\" name=\"fileImport\" style=\"width:260px;\"></td>";
 			html += "<td></td></tr>";
 			html += "<tr>";
 			html += "<td colspan=\"4\"><label id=\"fileName\" isCanUpolad='false' /></td>";
@@ -266,6 +265,7 @@ var userinfo = {
 	            document.getElementById('fileName').innerHTML = "<span style='color:Red'>错误提示:上传文件应该是.xlsx或.xls后缀,而不应该是" + file_typename + ",请重新选择文件</span>";
 			}
 		},onImportExcelUse:function(){ //导入excel
+			$("#importExcelWin").remove();
 			$(document.body).append("<div id='importExcelWin' class='easyui-window'></div>");
 			$('#importExcelWin').window({    
 			    width:400,    

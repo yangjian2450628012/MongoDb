@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoyang.entity.Admin;
+import com.xiaoyang.entity.Sign;
 
 /** 
 * @ClassName: LoginDaoImpl 
@@ -44,4 +45,10 @@ public class LoginDaoImpl implements LoginDao {
 		return this.mongoTemplate.findAll(Admin.class);
 	}
 
+	/**
+	 * 查询考勤记录
+	 */
+	public Sign querySign(String user_id) {
+		return this.mongoTemplate.findOne(new Query(Criteria.where("user_id").is(user_id)), Sign.class);
+	}
 }

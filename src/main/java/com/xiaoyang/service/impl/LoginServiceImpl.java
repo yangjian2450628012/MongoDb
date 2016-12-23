@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.xiaoyang.dao.LoginDao;
 import com.xiaoyang.entity.Admin;
+import com.xiaoyang.entity.Sign;
 
 import sun.misc.BASE64Decoder;
 
@@ -60,5 +61,9 @@ public class LoginServiceImpl implements LoginService {
 
 	public List<Admin> queryAll() {
 		return this.loginDao.queryAll();
+	}
+
+	public Sign querySign(String user_id) {
+		return this.loginDao.querySign(user_id);
 	}
 }

@@ -29,16 +29,115 @@ var well = {
 				fit : true,
 				border : false
 			});
+			
+			/*******************************************考勤操作*********************************************************/
+			
 			/* 选择工作日程触发事件*/
 			$('#job-calendar').calendar({
 				onSelect: function(date){
-					alert(date.getFullYear()+":"+(date.getMonth()+1)+":"+date.getDate());
-				}
+					alert(date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate());
+				},formatter:function(date){ //只计算前三个月的
+					var b = true;
+					var msg = "";
+					
+					if(date.getDay()==6 || date.getDay()==0) return date.getDate(); //星期六、星期天除外
+					
+					var options = $('#job-calendar').calendar("options"); 
+					var year = options.year; //获取日期里当前年份
+					var mothon = options.month; //获取日期里当前月份
+					
+					var firstDay = new Date(year,mothon-1,1); //获取日期里当月第一天
+					var lastDay = new Date(year,mothon,0); //获取日期里最后一天
+					
+					// 1.当月的1-31
+					if(date.getTime() < firstDay.getTime() || date.getTime() > lastDay.getTime()){
+						return date.getDate();
+					}
+					// 2.日期到了当天的17:30才做判断
+					var now = new Date();
+					now.setHours(00, 00, 00, 00);
+					if(now.getTime() == date.getTime()){ //是同一天
+						var _time = date;_time.setHours(new Date().getHours(), new Date().getMinutes(), new Date().getSeconds(), 00);
+						now.setHours(17,30,00,00);
+						if(now.getTime() > _time.getTime()){
+							return date.getDate();
+						}
+					}else{
+						if(now.getTime() < date.getTime()){
+							return date.getDate();
+						}
+					}	
+					
+					for ( var signinDate in well.signIn) {
+						var signTime = new Date(well.signIn[signinDate].split(" ")[0]+" 00:00:00");
+						if(date.getTime() == signTime.getTime()){ //是同一天判断
+							var standardTime = new Date(well.signIn[signinDate].split(" ")[0]+" 09:00:00"); //定义签到标准时间
+							var _date = new Date(well.signIn[signinDate].replace(/-/g,"/")); //用户签到时间
+							if(_date.getTime() > standardTime.getTime()){ //假如用户签到时间大与定义的标准时间，表示迟到
+								msg += "迟到";
+								b = false;
+							}
+							for ( var signoutDate in well.signOut) { //遍历判断签退
+								var signTime2 = new Date(well.signOut[signoutDate].split(" ")[0]+" 00:00:00");
+								if(date.getTime() == signTime2.getTime()){ //是同一天判断 
+									//console.log(date.getFullYear()+"-"+(date.getMonth()+1)+"-"+date.getDate());
+									var standardTime2 = new Date(well.signOut[signoutDate].split(" ")[0]+" 17:00:00"); //定义签到标准时间
+									var _date2 = new Date(well.signOut[signoutDate].replace(/-/g,"/")); //用户签到时间
+									if(standardTime2.getTime() > _date2.getTime()){
+										if(msg != "")msg += "|早退";
+										else msg += "早退";
+										b = false;
+									}
+								}
+								//signOut.splice(signoutDate,1); 
+								continue;
+							}
+							//signIn.splice(signinDate,1); //判断完后删除该数组,减少循环次数
+							continue;
+						}
+					}
+					if(!b){
+						return "<span id='"+date.getTime()+"'>"+date.getDate()+msg+"<script type=\"text/javascript\">$('#"+date.getTime()+"').parent()[0].style.backgroundColor='#bd362f';</script></span>";
+					}else{
+						return "<span id='"+date.getTime()+"'>"+date.getDate()+"正常<script type=\"text/javascript\">$('#"+date.getTime()+"').parent()[0].style.backgroundColor='rgb(144, 237, 125)';</script></span>";
+					}
+				} 
 			});
 			
+			//签到上绑定点击事件
+			$("#signin-a").bind("click", function(){
+				  var now = new Date();
+				  var standardTime = new Date();standardTime.setHours(9, 0, 0, 0);
+				  if(now.getTime() > standardTime){
+					  $.messager.confirm('提示信息','当前已经超过了签到时间,是否继续？',function(r){    
+						    if (r){    
+						    	well.sendSignData({type:"signin",date:now});
+						    }    
+						});  
+				  }else{
+					  well.sendSignData({type:"signin",date:now});
+				  }
+			});
+			//签退上绑定点击事件
+			$("#signout-a").bind("click", function(){
+				var now = new Date();
+				  var standardTime = new Date();standardTime.setHours(17, 0, 0, 0);
+				  if(now.getTime() < standardTime){
+					  $.messager.confirm('提示信息','当前时间还未到签退时间,是否继续？',function(r){    
+						    if (r){    
+						    	well.sendSignData({type:"signOut",date:now});
+						    }    
+						});  
+				  }else{
+					  well.sendSignData({type:"signOut",date:now});
+				  }
+			});
+			
+			/*****************************************************树形菜单操作 ****************************************************************/
 			/*拼接树形菜单*/
 			var zNodes =[{name:"系统模块",open:true,
-			     		children: [{name:"用户管理", "_name":"用户管理","url":contextPath+"/manager/usermanager",target:"my-ifream用户管理"}
+			     		children: [{name:"用户管理", "_name":"用户管理","url":contextPath+"/manager/usermanager",target:"my-ifream用户管理"},
+			     		           {name:"部门管理", "_name":"部门管理","url":contextPath+"/manager/deptmanager",target:"my-ifream部门管理"}
 				]},{name:"菜单模块",open:true,
 						children: [{name:"菜单管理","_name":"菜单管理","url":contextPath+"/manager/menumanager",target:"my-ifream菜单管理"}]
 				}];
@@ -190,7 +289,69 @@ var well = {
 			/*设置桌面*/
 			$('#mydeksot').portal({
 				border:false,
-				fit:true
+				fit:false
+			});
+			//初始化图形化
+			 $('#container').highcharts({
+			        chart: {
+			            plotBackgroundColor: null,
+			            plotBorderWidth: null,
+			            plotShadow: false,
+			           // marginLeft: 300,
+			            events:{
+			            	click: function(e) {
+					            	alert(56789);
+					            }
+			            }
+			        },
+			        exporting:{enabled:false},
+			        credits:{enabled:false},
+			        /*legend:{align:"right",itemDistance:15},*/
+			        title: {
+			            text:'全部流程未完成情况'
+			            //align:"right"
+			        },
+			        tooltip: {
+			            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+			        },
+			        plotOptions: {
+			            pie: {
+			                allowPointSelect: true,
+			                cursor: 'pointer',
+			                dataLabels: {
+			                    enabled: true,
+			                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+			                    style: {
+			                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+			                    }
+			                },
+			                showInLegend: true
+			            }
+			        },
+			        series: [{
+			            type: 'pie',
+			            name: '未完成',
+			            data: [
+			                ['紧急流程',   45.0],
+			                ['重要流程',       26.8],
+			                {
+			                    name: '普通流程',
+			                    y: 12.8,
+			                    sliced: true,
+			                    selected: true
+			                },
+			                ['其他待办',    8.5]
+			            ]
+			        }]
+			    });
+		},sendSignData:function(options){
+			$.messager.progress({title : "温馨提示",msg : "请稍后，正在处理......"});
+			$.post(contextPath+"/sign/signinAndOut", { date: options.date ,type: options.type},
+					   function(data){
+				$.messager.progress("close");
+					if(data.success){
+						$.messager.show({title:'温馨提示',msg:data.msg,timeout:1000,showType:'show'});
+					}     
 			});
 		},_change : function(){
 			/*更改框架皮肤*/
@@ -294,6 +455,30 @@ var well = {
 					}); 
 				}
 			}
+		},showinform:function(index,row){
+			var html = "<div style=\"font-size: 20px; width: 100%;\"><div>";
+				html+="<span><center>"+row.informName+"</center></span></div>";
+				html+="<div><div style=\"overflow: auto; width: 100%; height: 100%;\">";
+				html+="<div><p style=\"text-indent:2em\">"+row.content+"</p></div>";	
+				html+="<div style=\"text-align: right;margin-right:5px;\">";
+				html+="<div>发布人:"+row.creater+"</div><div>发布机构:"+row.dept+"</div>";
+				html+="<div>发布时间:"+row.createtime+"</div><div></div></div></div></div></div>";
+			$("#showinform").remove();
+			$(document.body).append("<div id='showinform' class='easyui-dialog'></div>");
+			$('#showinform').dialog({    
+			    width:540,    
+			    height:300,    
+			    modal:true,
+			    title:'我的公告',
+			    closed:true,
+			    //iconCls:"icon-speaker",
+			    content:html,
+			    minimizable:false,
+			    maximizable:true
+			});
+			 $('#showinform').window('open');
+		},editCheckbox:function(){
+			return "<img src='"+contextPath+"/resource/images/sms-readed.gif' width='16' height='16' style='margin-top:5px;' />";
 		}
 };
 

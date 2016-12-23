@@ -47,10 +47,10 @@ public class ValidateCodeUtil {
 	
 	/**
 	 * 自定义宽、高、验证码个数、线条个数
-	 * @param width
-	 * @param height
-	 * @param codeCount
-	 * @param lineCont
+	 * @param width 图片宽度
+	 * @param height 图片高度
+	 * @param codeCount 验证码个数
+	 * @param lineCont 干扰线条
 	 */
 	public ValidateCodeUtil(int width, int height, int codeCount, int lineCont) {
 		ValidateCodeUtil.width = width;

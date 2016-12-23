@@ -33,7 +33,8 @@
 			column.addClass('portal-column').appendTo(td);
 			column.find('>div').each(function(){	// each portal panel
 				var p = $(this).addClass('portal-p').panel({
-					doSize:false,
+					doSize:true,
+//					doSize:false,
 					cls:'portal-panel'
 				});
 				makeDraggable(target, p);
@@ -60,11 +61,11 @@
 				'<style id="easyui-portal-style">' +
 				'.portal{padding:0;margin:0;overflow:auto;border:1px solid #99bbe8;}' +
 				'.portal-noborder{border:0;}' +
-				'.portal .portal-panel{margin-bottom:10px;}' +
+				'.portal .portal-panel{margin-bottom:5px;}' +
 				'.portal-column-td{vertical-align:top;}' +
-				'.portal-column{padding:10px 0 10px 10px;overflow:hidden;}' +
-				'.portal-column-left{padding-left:10px;}' +
-				'.portal-column-right{padding-right:10px;}' +
+				'.portal-column{padding:0px 0 5px 5px;overflow:hidden;}' +
+				'.portal-column-left{padding-left:0px;}' +
+				'.portal-column-right{padding-right:0px;}' +
 				'.portal-proxy{opacity:0.6;filter:alpha(opacity=60);}' +
 				'.portal-spacer{border:3px dashed #eee;margin-bottom:10px;}' +
 				'</style>'
@@ -320,7 +321,7 @@
 		width:'auto',
 		height:'auto',
 		border:true,
-		fit:false,
+		fit:true,
 		onResize:function(width,height){},
 		onStateChange:function(panel){}
 	};

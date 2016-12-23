@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.xiaoyang.entity.Admin;
+import com.xiaoyang.entity.Sign;
 import com.xiaoyang.service.impl.LoginService;
 import com.xiaoyang.util.ValidateCodeUtil;
 
@@ -46,6 +47,11 @@ public class LoginController {
 			mav.addObject("username", admin.getUsername());
 			mav.addObject("authmenus", admin.getAuthmenu());
 			mav.addObject("secondMenu", admin.getSecondMenu());
+			Sign sign = this.loginSevice.querySign(admin.get_id());
+			if(sign != null){
+				mav.addObject("signin",sign.getSignin());
+				mav.addObject("signout",sign.getSignout());
+			}
 			//mav.addObject("power", "0".equals(admin.getOrgid())?"管理员":"普通用户");
 			return mav;
 		}
@@ -91,21 +97,25 @@ public class LoginController {
 	 * @return
 	 */
 	@RequestMapping(value="check",method=RequestMethod.POST)
-	public ModelAndView goCheck(@RequestParam(value = "_value")String _value,@RequestParam(value = "validation")String va,HttpSession session){
+	public String goCheck(@RequestParam(value = "_value")String _value,@RequestParam(value = "validation")String va,
+			HttpSession session){
 		boolean b; 
 		if(!va.toUpperCase().equals(session.getAttribute("code"))){
 			b = false;
-		}else
+			logger.info("登录失败,验证码错误!");
+			return "redirect:/login.jsp";
+		}else{
 			b= this.loginSevice.query(_value,session);
+		}
 		if(b)
 		{
 			session.setAttribute("userinfo", b);
-			return new ModelAndView("redirect:index");
+			return "redirect:index";
 		}
 		else
 		{
 			logger.info("登录失败,用户名或密码错误!");
-			return new ModelAndView("redirect:/login.jsp");
+			return "redirect:/login.jsp";
 		}
 	}
 	

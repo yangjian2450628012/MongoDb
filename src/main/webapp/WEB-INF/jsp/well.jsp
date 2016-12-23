@@ -69,8 +69,8 @@
 					</tr>
 					<tr>
 						<td>
-							<a title="首页定义" href="javascript:void();"><img src="resource/images/personset.gif" /></a>
-							<a title="刷新" href="javascript:void();"><img src="resource/images/refresh.gif" ></a>
+							<a title="主页" href="javascript:$('#_tabs').tabs('select','我的桌面');"><img src="resource/images/personset.gif" /></a>
+							<a title="刷新" href="javascript:location.reload();"><img src="resource/images/refresh.gif" ></a>
 							<a title="帮助中心" href="javascript:void();"><img src="resource/images/help.gif"></a>
 							<a title="注销" href="logout"><img src="resource/images/logout.gif"></a>
 						</td>
@@ -106,29 +106,71 @@
 					<div region="center" border="false" >
 						
 						<div id="mydeksot" style="position:relative">
-							<div style="width:30%;">
-								<div title="个人信息" iconCls="icon-man" collapsible="true" closable="true" style="text-align:center;height:200px;">
-									
+							<div style="width:56%;">
+								<div title="个人信息" iconCls="icon-man" collapsible="true" closable="true" style="text-align:center;height:280px;">
+									<div class="x-panel-noborder x-column" style="width: 171px;float: left;margin-left: 30px;font-family: Microsoft YaHei;">
+										<div class="x-panel-bwrap">
+											<div style="text-align: center; margin-top: 10px;width: 171px;">
+												<div id="CNOA_MY_BIGIMAGES" class="x-panel-noborder" style="margin: 0px auto; width: 100%; position: relative;">
+													<div class="x-panel-bwrap">
+														<div id="CNOA_MY_IMAGES">
+															<img src="<%=path %>/upload/img/admin.jpg" style="cursor:pointer;width: 100px;height: 100px;border-radius: 50%;" id="CNOA_MY_PORTRAIT">
+														</div>
+													</div>
+												</div>
+												<div class="x-panel-noborder" style="margin-top: 15px;">
+													<div class="x-panel-bwrap">
+														<div id="CNOA_MY_NAME" style="font-size: 21.3438px;">超级管理员</div>
+													</div>
+												</div>
+												<div class="x-panel-noborder" style="margin-top: 15px;">
+													<div class="x-panel-bwrap">
+														<div id="CNOA_MY_DEPT" title="云全协同办公平台-超级管理员">云全协同办公平台-超级管理员</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div id="container" style="min-width: 200px; height: 250px; max-width: 400px; margin: 0 auto;margin-right: 10px;"></div>
 							    </div>
-							    <div title="待办任务" collapsible="true" closable="true" iconCls="icon-myTask_yb" style="height:200px;">
-							   		
-							    </div>
-							</div>
-							<div style="width:40%;">
-								<div title="通知公告" closable="true" collapsible="true" iconCls="icon-speaker" style="height:200px;">
+							    <div title="通知公告" closable="true" collapsible="true" iconCls="icon-speaker" style="height:200px;">
+									<table class="easyui-datagrid" data-options="url:'<%=path %>/json/inform.json',fitColumns:true,fit:true,border:false,striped:true,
+									onClickRow:well.showinform,onLoadSuccess:well.informLoadSuccess,singleSelect:true">   
+								    <thead>   
+								        <tr>   
+								        	<th data-options="field:'checkbox',width:10,align:'center',formatter:well.editCheckbox"><img src="<%=path %>/resource/images/sms-readed.gif" width="16" height="16" style="margin-top:5px;"/></th>  
+								            <th data-options="field:'creater',width:50,align:'center'">发布人</th>   
+								            <th data-options="field:'informName',width:100,align:'center'">公告名称</th>   
+								            <th data-options="field:'createtime',width:80,align:'center'">创建时间</th>   
+								        </tr>   
+								    </thead>   
+								</table>  
+								</div>
+							    <div title="待办会议" closable="true" collapsible="true" iconCls="icon-metting" style="height:200px;text-align:center;">
 									
 								</div>
+							</div>
+							<div style="width:44%;">
+								<div title="考勤记录" collapsible="true" closable="true" iconCls="icon-calendar" style="height:280px;">
+									<div style="height:85%;">
+										<div class="easyui-calendar" id="job-calendar" data-options="fit:true,border:false"></div>
+									</div>
+									<div style="height:15%;background-color: rgba(224, 236, 255, 0.35);">
+										<div style="float: right;margin-top: 5px;margin-right:5px;">
+											<a id="btn2" class="easyui-linkbutton" data-options="iconCls:'book_of_record',plain:true">考勤记录</a>
+											<span class="datagrid-btn-separator" style="vertical-align: middle; display:inline-block;float:none"></span>
+											<a id="signin-a" class="easyui-linkbutton"  data-options="iconCls:'icon-edit',plain:true">签到</a>
+											<span class="datagrid-btn-separator" style="vertical-align: middle; display:inline-block;float:none"></span> 
+											<a id="signout-a" class="easyui-linkbutton" data-options="iconCls:'icon-ok',plain:true">签退</a> 
+										</div>
+									</div>
+								</div>
+								<div title="待办任务" collapsible="true" closable="true" iconCls="icon-myTask_yb" style="height:200px;">
+							   		
+							    </div>
 								<div title="待办流程" collapsible="true" closable="true" iconCls="icon-handleTask_db" style="height:200px;">
 							   		
 							    </div>
-							</div>
-							<div style="width:30%;">
-								<div title="工作日程" collapsible="true" closable="true" iconCls="icon-calendar" style="height:200px;">
-									<div class="easyui-calendar" id="job-calendar" data-options="fit:true,border:false"></div>
-								</div>
-								<div title="待办会议" closable="true" collapsible="true" iconCls="icon-metting" style="height:200px;text-align:center;">
-									
-								</div>
 							</div>
 						</div>
 					</div>
@@ -157,7 +199,7 @@
 			<%} %>
 		</div>  
 	</div> 
-	
+</body>
 <script type="text/javascript">
 <%if(request.getAttribute("authmenus")!=null){ %>
 var _h = "<ul>";
@@ -181,15 +223,21 @@ _h = null;
 <script type="text/javascript" src="<%=path %>/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="<%=path %>/easyui/jqueryZtree.js"></script>
 <script type="text/javascript" src="<%=path %>/easyui/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="<%=path %>/easyui/jquery.easyui.min.js"></script>
-<script type="text/javascript" src="<%=path %>/easyui/jquery.portal.js"></script> 
-<script type="text/javascript" src="<%=path %>/resource/js/well.js"></script>
+<script type="text/javascript" src="<%=path %>/easyui/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="<%=path %>/easyui/jquery.portal.js"></script>
+<!-- <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script> --> 
+<script src="<%=path%>/highcharts/code/highcharts.js"></script>
+<script src="<%=path%>/highcharts/code/modules/exporting.js"></script> 
+<script type="text/javascript" src="<%=path %>/resource/js/well.js?radom=<%=Math.random() %>"></script>
 <script type="text/javascript"> 
+well.signIn = <%=request.getAttribute("signin")%>;
+well.signOut = <%=request.getAttribute("signout")%>;
 var _da = {"个人":Array(),"通知":Array(),"流程":Array(),"文档":Array(),"报告":Array(),"项目":Array(),"资产":Array(),"人事":Array(),"客户":Array(),"采购":Array()};
 <%if(request.getAttribute("secondMenu")!=null){ %>
 var _sH = "<ul>";
 for (var i=0,secondMenu=<%=request.getAttribute("secondMenu") %>;i < secondMenu.length;i++) {
-	if(secondMenu[i].pId == "1"){//组装html
+	if(secondMenu[i].pId == "1"){//组装html  
 		if(secondMenu[i].child != undefined && typeof secondMenu[i].child == "object"){
 			_sH += "<li class=\"show-child\"><a><div>";
 			_sH += "<img alt='' src="+secondMenu[i].imgpath+" />"+secondMenu[i].name+"<span class=\"accordion-img\"></span>";
@@ -233,5 +281,4 @@ _sH = null;
 <%}%>
 </script>
 <script type="text/javascript" src="<%=path %>/resource/js/menu.js"></script>
-</body>
 </html>
