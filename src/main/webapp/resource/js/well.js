@@ -13,7 +13,7 @@ var well = {
 				       {name:"布色",value:"material"}],    
 			    valueField:'value',    
 			    textField:'name',
-			    width:120,
+			    width:110,
 			    height:20,
 			    editable:false,
 			    panelHeight:130,
@@ -84,7 +84,7 @@ var well = {
 									var standardTime2 = new Date(well.signOut[signoutDate].split(" ")[0]+" 17:00:00"); //定义签到标准时间
 									var _date2 = new Date(well.signOut[signoutDate].replace(/-/g,"/")); //用户签到时间
 									if(standardTime2.getTime() > _date2.getTime()){
-										if(msg != "")msg += "|早退";
+										if(msg != "")msg += "&早退";
 										else msg += "早退";
 										b = false;
 									}
@@ -291,59 +291,6 @@ var well = {
 				border:false,
 				fit:false
 			});
-			//初始化图形化
-			 $('#container').highcharts({
-			        chart: {
-			            plotBackgroundColor: null,
-			            plotBorderWidth: null,
-			            plotShadow: false,
-			           // marginLeft: 300,
-			            events:{
-			            	click: function(e) {
-					            	alert(56789);
-					            }
-			            }
-			        },
-			        exporting:{enabled:false},
-			        credits:{enabled:false},
-			        /*legend:{align:"right",itemDistance:15},*/
-			        title: {
-			            text:'全部流程未完成情况'
-			            //align:"right"
-			        },
-			        tooltip: {
-			            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-			        },
-			        plotOptions: {
-			            pie: {
-			                allowPointSelect: true,
-			                cursor: 'pointer',
-			                dataLabels: {
-			                    enabled: true,
-			                    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
-			                    style: {
-			                        color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
-			                    }
-			                },
-			                showInLegend: true
-			            }
-			        },
-			        series: [{
-			            type: 'pie',
-			            name: '未完成',
-			            data: [
-			                ['紧急流程',   45.0],
-			                ['重要流程',       26.8],
-			                {
-			                    name: '普通流程',
-			                    y: 12.8,
-			                    sliced: true,
-			                    selected: true
-			                },
-			                ['其他待办',    8.5]
-			            ]
-			        }]
-			    });
 		},sendSignData:function(options){
 			$.messager.progress({title : "温馨提示",msg : "请稍后，正在处理......"});
 			$.post(contextPath+"/sign/signinAndOut", { date: options.date ,type: options.type},
@@ -479,10 +426,115 @@ var well = {
 			 $('#showinform').window('open');
 		},editCheckbox:function(){
 			return "<img src='"+contextPath+"/resource/images/sms-readed.gif' width='16' height='16' style='margin-top:5px;' />";
+		},toDoList: function(idname,valueColor,dataValue,valueNum,valueName,otherValue,nameValue,idWidth,backgroundColor) {
+			 require(
+		        [
+		            "echarts",
+		            "echarts/chart/pie",
+		            "echarts/chart/funnel"
+		        ],
+		        function (ec) {
+		        	var xZB = idWidth*0.9;
+		        	var width = $(window).width();
+		        	var Xyuan = width*30/1920;
+		        	var Yyuan = width*40/1920;
+		        	var YuanFS = width*15/1920;
+		            var myChart = ec.init(document.getElementById(idname));
+		            var labelTop = {
+					    normal : {
+					        label : {
+					            show : false,
+					            position : 'center',
+					            formatter : '{b}',
+					            textStyle: {
+					                baseline : 'bottom'
+					            }
+					        },
+					        labelLine : {
+					            show : false
+					        }
+					    }
+					};
+					var labelFromatter = {
+					    normal : {
+					        color: '#FFFFFF',
+					        label : {
+					            formatter : function (params){
+					                return params.value+'%';
+					            },
+					            textStyle: {
+					            	color: '#FFFFFF',
+					            	fontSize: YuanFS,
+					            	baseline : 'middle'
+					            }
+					        }
+					    }
+					};
+					var labelBottom = {
+					    normal : {
+					        color: valueColor,
+					        label : {
+					            show : true,
+					            position : 'center'
+					        },
+					        labelLine : {
+					            show : false
+					        }
+					    }
+					};
+		            var radius = [Xyuan, Yyuan];
+		            var option = {
+		               	legend: {
+					        x : 'center',
+					        show: false,
+					        y : 'center',
+					        data:[
+					            dataValue
+					        ]
+					    },
+					    title: {
+					    	text: valueNum,
+					       	subtext: valueName,
+					        x: xZB,
+					        y: '69',
+					      	textAlign: 'right',
+					      	textStyle : {
+					        	fontSize: 13,
+					           	color: '#FFFFFF',
+					           	fontFamily: 'arial'
+					        },
+					      	subtextStyle: {
+					        	fontSize: 13,
+					          	color: '#FFFFFF',
+					          	fontFamily: 'Microsoft YaHei'
+					        }
+					    },
+					    series : [
+					        {
+					            type : 'pie',
+					            center : ['50%', '50%'],
+					            radius : radius,
+					            x: '0%', // for funnel
+					            itemStyle : labelFromatter,
+					            data : [
+					                {name:'other', value: otherValue, itemStyle : labelBottom},
+					                {name: dataValue, value:nameValue ,itemStyle : labelTop}
+					            ]
+					        }
+					    ]
+		            };
+		            myChart.setOption(option);
+		            $("#"+idname).css({"background-color":backgroundColor});
+		        }
+		    );
 		}
 };
 
 jQuery(function(){
 	//初始化
 	well.init();
+	well.toDoList('levelOne','#A2A9C6','levelOne',0,'紧急流程',100,0,118,'#6075A3');
+	well.toDoList('levelTwo','#ACD59F','levelTwo',0,'重要流程',100,0,118,'#61B860');
+	well.toDoList('levelThree','#F7D098','levelThree',0,'普通流程',100,0,118,'#f7a23c');			
+	well.toDoList('levelFour','#AFD3E6','levelFour',0,'其他待办',50,0,118,'#47A4CC');
 });

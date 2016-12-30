@@ -204,6 +204,5 @@ public class AdminDaoImpl implements AdminDao{
 			}
 			this.mongoTemplate.upsert(new Query(Criteria.where("user_id").is(user_id)), update, Sign.class);
 		}
-		
 	}
 }

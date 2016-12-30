@@ -106,11 +106,11 @@
 					<div region="center" border="false" >
 						
 						<div id="mydeksot" style="position:relative">
-							<div style="width:56%;">
+							<div style="width:57%;">
 								<div title="个人信息" iconCls="icon-man" collapsible="true" closable="true" style="text-align:center;height:280px;">
-									<div class="x-panel-noborder x-column" style="width: 171px;float: left;margin-left: 30px;font-family: Microsoft YaHei;">
+									<div class="x-panel-noborder x-column" style="width: 160px;float: left;margin-left: 5px;font-family: Microsoft YaHei;">
 										<div class="x-panel-bwrap">
-											<div style="text-align: center; margin-top: 10px;width: 171px;">
+											<div style="text-align: center; margin-top: 10px;width: 160px;">
 												<div id="CNOA_MY_BIGIMAGES" class="x-panel-noborder" style="margin: 0px auto; width: 100%; position: relative;">
 													<div class="x-panel-bwrap">
 														<div id="CNOA_MY_IMAGES">
@@ -131,7 +131,10 @@
 											</div>
 										</div>
 									</div>
-									<div id="container" style="min-width: 200px; height: 250px; max-width: 400px; margin: 0 auto;margin-right: 10px;"></div>
+									<div style="width: 118px;height: 110px;float: left;margin-top: 5px;" id="levelOne"></div>
+									<div style="width: 118px;height: 110px;float: left;margin:5px 0px 0px 5px;" id="levelTwo"></div>
+									<div style="width: 118px;height: 110px;float: left;margin:5px 0px 0px 5px;" id="levelThree"></div>
+									<div style="width: 118px;height: 110px;float: left;margin:5px 0px 0px 5px;" id="levelFour"></div>
 							    </div>
 							    <div title="通知公告" closable="true" collapsible="true" iconCls="icon-speaker" style="height:200px;">
 									<table class="easyui-datagrid" data-options="url:'<%=path %>/json/inform.json',fitColumns:true,fit:true,border:false,striped:true,
@@ -150,7 +153,7 @@
 									
 								</div>
 							</div>
-							<div style="width:44%;">
+							<div style="width:43%;">
 								<div title="考勤记录" collapsible="true" closable="true" iconCls="icon-calendar" style="height:280px;">
 									<div style="height:85%;">
 										<div class="easyui-calendar" id="job-calendar" data-options="fit:true,border:false"></div>
@@ -178,7 +181,7 @@
 			</div>
 		</div>
     </div>  
-    <div data-options="region:'west',title:'功能导航',split:true" style="width:200px;"><!-- iconCls="icon-menu" -->
+    <div data-options="region:'west',title:'功能导航',split:true" style="width:185px;"><!-- iconCls="icon-menu" -->
 		<div class="easyui-accordion" data-options="border:false,fit:true" id="accord">   
 		    <div title="更换皮肤:<input id='theme-id' />" data-options="collapsible:false" id="accordion-one">
 			</div>
@@ -225,10 +228,11 @@ _h = null;
 <script type="text/javascript" src="<%=path %>/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="<%=path %>/easyui/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="<%=path %>/easyui/jquery.portal.js"></script>
-<!-- <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
-<script src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script> --> 
+<%-- <script src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
+<script src="http://cdn.hcharts.cn/highcharts/modules/exporting.js"></script>
 <script src="<%=path%>/highcharts/code/highcharts.js"></script>
-<script src="<%=path%>/highcharts/code/modules/exporting.js"></script> 
+<script src="<%=path%>/highcharts/code/modules/exporting.js"></script>  --%>
+<script type="text/javascript" src="<%=path%>/echarts/echarts.js"></script>
 <script type="text/javascript" src="<%=path %>/resource/js/well.js?radom=<%=Math.random() %>"></script>
 <script type="text/javascript"> 
 well.signIn = <%=request.getAttribute("signin")%>;

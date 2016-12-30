@@ -125,8 +125,8 @@
   
   <build>  
         <finalName>MongDB</finalName>
+		<!-- 配置Tomcat插件 -->
         <plugins>
-			<!-- 配置Tomcat插件 -->
 			<plugin>
 				<groupId>org.apache.tomcat.maven</groupId>
 				<artifactId>tomcat7-maven-plugin</artifactId>
@@ -135,8 +135,6 @@
 					<path>/</path>
 				</configuration>
 			</plugin>
-			
-			<!-- 导出依赖jar包 -->
 			
 		</plugins>
     </build>  
