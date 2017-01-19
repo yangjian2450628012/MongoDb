@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
@@ -22,9 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.google.gson.Gson;
 import com.xiaoyang.entity.Admin;
+import com.xiaoyang.entity.JsonTreeData;
 import com.xiaoyang.entity.Menu;
 import com.xiaoyang.service.impl.AdminService;
 import com.xiaoyang.util.EasyuiResult;
+
+import net.sf.json.JSONObject;
 
 /** 
 * @ClassName: MainController 
@@ -41,6 +43,20 @@ public class ManagerController {
 	@RequestMapping(value="/thrid",method=RequestMethod.GET)
 	public String toIndex(Model model){
 		return "userinfo";
+	}
+	
+	@RequestMapping(value="/appEngine",method=RequestMethod.GET)
+	public String toAppEngine(){
+		return "appEngine";
+	}
+	
+	/**
+	 * 查询树形菜单
+	 * @return
+	 */
+	@RequestMapping(value="/queryMenu",method=RequestMethod.POST)
+	public @ResponseBody List<JsonTreeData> queryMenu(){
+		return this.easyuitreeService.queryMenuToList();
 	}
 	
 	/**

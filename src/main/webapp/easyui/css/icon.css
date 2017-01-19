@@ -157,3 +157,12 @@
 .book_of_record {
     background: url('icons/book_of_record.png') no-repeat !important;
 }
+.icon-tjmb {
+    background: url('icons/tjmb.png') no-repeat !important;
+}
+.icon-del {
+    background: url('icons/del.gif') no-repeat !important;
+}
+.icon-add {
+    background: url('icons/add.gif') no-repeat !important;
+}

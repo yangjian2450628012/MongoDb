@@ -2,8 +2,10 @@ package com.xiaoyang.service.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.xiaoyang.dao.AdminDao;
@@ -22,6 +24,8 @@ public class AdminServiceImpl implements AdminService {
 
 	@Autowired
 	private AdminDao easyuitreeDao; 
+	@Autowired
+	private JdbcTemplate jdbcTemplate; 
 	
 	/* *
 	 * 查询树形菜单
@@ -67,6 +71,57 @@ public class AdminServiceImpl implements AdminService {
 	 */
 	public void insertAdmin(List<Admin> list) {
 		this.easyuitreeDao.insertAdmin(list);
+	}
+
+	/* 
+	 * 查询菜单拼装json
+	 * 用原生jdbc查询数据库
+	 */
+	public List<JsonTreeData> queryMenuToList() {
+		List<JsonTreeData> result = new ArrayList<JsonTreeData>();
+		
+		String sql = "select id,text from menu order by orderA asc";
+		List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql);
+		for (Map<String, Object> map : list) {
+			JsonTreeData JsonTreeData = new JsonTreeData();
+			JsonTreeData.setId(map.get("id").toString());
+			JsonTreeData.setPid("0"); //根节点
+			JsonTreeData.setText(map.get("text").toString());
+			JsonTreeData.setState("open");
+			List<JsonTreeData> listC = this.queryMenuC(map.get("id"));
+			if(listC != null && listC.size() > 0){
+				JsonTreeData.setChildren(listC);
+			}
+			result.add(JsonTreeData);
+		}
+		return result;
+	}
+	
+	/**
+	 * 通过递归查询子节点
+	 * @param id
+	 * @return
+	 */
+	private List<JsonTreeData> queryMenuC(Object id){
+		List<JsonTreeData> result = new ArrayList<JsonTreeData>();
+		
+		String sqlC = "select id,text,pid,url from submenu where pid ='"+id+"' order by orderA asc";
+		List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sqlC);
+		
+		for (Map<String, Object> map : list) {
+			JsonTreeData JsonTreeData = new JsonTreeData();
+			JsonTreeData.setId(map.get("id").toString());
+			JsonTreeData.setText(map.get("text").toString());
+			JsonTreeData.setPid(id.toString());
+			JsonTreeData.setUrl(map.get("url")==null ? "": map.get("url").toString());
+			List<JsonTreeData> listC = this.queryMenuC(map.get("id")); //调用递归
+			JsonTreeData.setState("open");
+			if(listC != null && listC.size() > 0){
+				JsonTreeData.setChildren(listC);
+			}
+			result.add(JsonTreeData);
+		}
+		return result;
 	}
 	
 }

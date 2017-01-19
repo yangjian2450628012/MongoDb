@@ -1,16 +1,4 @@
-/**
- * portal - jQuery EasyUI
- * 
- * Licensed under the GPL:
- *   http://www.gnu.org/licenses/gpl.txt
- *
- * Copyright 2010-2012 www.jeasyui.com 
- * 
- * Dependencies:
- *   draggable
- *   panel
- * 
- */
+
 (function($){
 	/**
 	 * initialize the portal

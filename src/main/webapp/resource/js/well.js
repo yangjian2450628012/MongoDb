@@ -139,7 +139,8 @@ var well = {
 			     		children: [{name:"用户管理", "_name":"用户管理","url":contextPath+"/manager/usermanager",target:"my-ifream用户管理"},
 			     		           {name:"部门管理", "_name":"部门管理","url":contextPath+"/manager/deptmanager",target:"my-ifream部门管理"}
 				]},{name:"菜单模块",open:true,
-						children: [{name:"菜单管理","_name":"菜单管理","url":contextPath+"/manager/menumanager",target:"my-ifream菜单管理"}]
+						children: [{name:"菜单管理","_name":"菜单管理","url":contextPath+"/manager/menumanager",target:"my-ifream菜单管理"},
+						           {name:"应用引擎","_name":"应用引擎","url":contextPath+"/manager/appEngine",target:"my-ifream应用引擎"}]
 				}];
 
 			/*给树形节点增加触发事件*/

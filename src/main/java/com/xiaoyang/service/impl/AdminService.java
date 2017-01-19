@@ -23,4 +23,6 @@ public interface AdminService {
 	Admin editUse(String _id);
 	
 	void insertAdmin(List<Admin> list);
+	
+	List<JsonTreeData> queryMenuToList();
 }

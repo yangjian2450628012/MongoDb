@@ -19,7 +19,8 @@
     <mvc:annotation-driven enable-matrix-variables="true" />
     <!-- 允许对静态资源文件的访问 -->
     <mvc:default-servlet-handler/>
-
+	<!-- <mvc:annotation-driven /> -->
+	
     <bean id="viewResolver"
           class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
@@ -35,7 +36,7 @@
 	</bean>
 	
 	<!-- 虚拟机hostname ：Host00155d9b0605 -->
-    <mongo:mongo id="mongodb" host="192.168.155.2" port="12345">
+    <mongo:mongo id="mongodb" host="192.168.155.11" port="12345">
         <mongo:options/>
     </mongo:mongo>
     <mongo:db-factory dbname="NICEOA" mongo-ref="mongodb"/>
@@ -46,4 +47,30 @@
 
     <mongo:repositories base-package="com.xiaoyang.dao"/>
 
+	<!-- 1.mysql数据库连接池 -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+    	<property name="driverClass" value="com.mysql.jdbc.Driver"/>
+    	<property name="jdbcUrl" value="jdbc:mysql://192.168.1.107:3306/niceoa"/>
+    	<property name="user" value="xiaoyang"/>
+    	<property name="password" value="xiaoyang"/>
+    	
+    	<!-- c3p0连接池私有属性 -->
+    	<property name="maxPoolSize" value="30"/>
+    	<property name="minPoolSize" value="10"/>
+    	<!-- 关闭连接后不自动提交 -->
+    	<property name="autoCommitOnClose" value="false"/>
+    	<property name="checkoutTimeout" value="1000"/><!-- 超时等待 -->
+    	<property name="acquireRetryAttempts" value="2"/><!-- 连接失败重试次数 -->
+    </bean>
+	
+	<!-- 2. 创建JdbcTemplate对象 (原生jdbc操作数据库)-->  
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">  
+        <property name="dataSource" ref="dataSource"></property>  
+    </bean>  
+    
+     <!-- 3. 配置事务管理器类 -->  
+    <!-- <bean id="txManager" class="org.springframework.jdbc.DataSourceTransactionManager">  
+       <property name="dataSource" ref="dataSource"></property>  
+    </bean>   -->
+    
 </beans>

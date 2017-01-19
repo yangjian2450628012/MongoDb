@@ -181,7 +181,7 @@
 			</div>
 		</div>
     </div>  
-    <div data-options="region:'west',title:'功能导航',split:true" style="width:185px;"><!-- iconCls="icon-menu" -->
+    <div data-options="region:'west',title:'功能导航',split:true,onCollapse:function(){$('#mydeksot').portal('resize')}" style="width:185px;"><!-- iconCls="icon-menu" -->
 		<div class="easyui-accordion" data-options="border:false,fit:true" id="accord">   
 		    <div title="更换皮肤:<input id='theme-id' />" data-options="collapsible:false" id="accordion-one">
 			</div>
