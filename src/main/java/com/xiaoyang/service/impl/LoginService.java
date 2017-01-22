@@ -2,7 +2,7 @@ package com.xiaoyang.service.impl;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
 import com.xiaoyang.entity.Admin;
 import com.xiaoyang.entity.Sign;
@@ -12,7 +12,7 @@ import com.xiaoyang.entity.Sign;
 */
 public interface LoginService {
 	
-	boolean query(String _value,HttpSession session);
+	String query(String _value);
 	
 	boolean update(Admin admin);
 	
@@ -21,4 +21,6 @@ public interface LoginService {
 	List<Admin> queryAll();
 
 	Sign querySign(String get_id);
+	
+	Admin queryAdminByid(String id);
 }

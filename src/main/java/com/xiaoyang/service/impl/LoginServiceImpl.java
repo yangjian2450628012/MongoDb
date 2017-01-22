@@ -3,8 +3,6 @@ package com.xiaoyang.service.impl;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -27,7 +25,8 @@ public class LoginServiceImpl implements LoginService {
 	 * 根據查詢結果返回是真假
 	 * @throws IOException 
 	 */
-	public boolean query(String _value,HttpSession session) {
+	public String query(String _value) {
+		String info = "";
 		try {
 			String[] dec = new String(new BASE64Decoder().decodeBuffer(_value)).split(":");
 			Admin admin = new Admin();
@@ -36,17 +35,19 @@ public class LoginServiceImpl implements LoginService {
 			Admin _admin = this.loginDao.query(admin);
 			if(_admin == null)
 			{
-				return false;
+				return info;
 			}
 			if(!admin.getUsername().equals(_admin.getUsername())&&!admin.getPassword().equals(_admin.getPassword()) )
 			{
-				return false;
+				return info;
 			}
-			session.setAttribute("user", _admin);
+			//把用户信息加密放到cookie中
+			info = _admin.get_id()+":"+admin.getUsername();
+//			session.setAttribute("user", _admin);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return true;
+		return info;
 	}
 
 	public boolean update(Admin admin) {
@@ -65,5 +66,12 @@ public class LoginServiceImpl implements LoginService {
 
 	public Sign querySign(String user_id) {
 		return this.loginDao.querySign(user_id);
+	}
+
+	/* 根据id查询用户信息
+	 * @see com.xiaoyang.service.impl.LoginService#queryAdminByid(java.lang.String)
+	 */
+	public Admin queryAdminByid(String id) {
+		return this.loginDao.queryAdminByid(id);
 	}
 }

@@ -51,4 +51,11 @@ public class LoginDaoImpl implements LoginDao {
 	public Sign querySign(String user_id) {
 		return this.mongoTemplate.findOne(new Query(Criteria.where("user_id").is(user_id)), Sign.class);
 	}
+
+	/* 根据用户id查询用户信息
+	 * @see com.xiaoyang.dao.LoginDao#queryAdminByid(java.lang.String)
+	 */
+	public Admin queryAdminByid(String id) {
+		return this.mongoTemplate.findOne(new Query(Criteria.where("_id").is(id)), Admin.class);
+	}
 }

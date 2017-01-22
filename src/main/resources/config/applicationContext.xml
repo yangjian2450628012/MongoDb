@@ -34,12 +34,14 @@
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="maxUploadSize" value="10485760"></property>
 	</bean>
+	<!-- 加载配置文件 -->
+	<context:property-placeholder location="classpath:system.properties"/>
 	
 	<!-- 虚拟机hostname ：Host00155d9b0605 -->
-    <mongo:mongo id="mongodb" host="192.168.155.11" port="12345">
+    <mongo:mongo id="mongodb" host="${mongodUrl}" port="${mongodPort}">
         <mongo:options/>
     </mongo:mongo>
-    <mongo:db-factory dbname="NICEOA" mongo-ref="mongodb"/>
+    <mongo:db-factory dbname="${mongodDb}" mongo-ref="mongodb"/>
 
     <bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
         <constructor-arg name="mongoDbFactory" ref="mongoDbFactory"/>
@@ -49,10 +51,10 @@
 
 	<!-- 1.mysql数据库连接池 -->
 	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-    	<property name="driverClass" value="com.mysql.jdbc.Driver"/>
-    	<property name="jdbcUrl" value="jdbc:mysql://192.168.1.107:3306/niceoa"/>
-    	<property name="user" value="xiaoyang"/>
-    	<property name="password" value="xiaoyang"/>
+    	<property name="driverClass" value="${mysqlDriver}"/>
+    	<property name="jdbcUrl" value="${mysqlUrl}"/>
+    	<property name="user" value="${mysqlUid}"/>
+    	<property name="password" value="${mysqlPwd}"/>
     	
     	<!-- c3p0连接池私有属性 -->
     	<property name="maxPoolSize" value="30"/>

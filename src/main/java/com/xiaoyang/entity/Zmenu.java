@@ -5,7 +5,13 @@ public class Zmenu {
 	private String text;
 	private String createtime;
 	private int orderA;
-	
+	private String type;
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public String getId() {
 		return id;
 	}

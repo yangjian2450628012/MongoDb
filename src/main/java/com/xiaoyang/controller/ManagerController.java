@@ -1,5 +1,6 @@
 package com.xiaoyang.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +24,9 @@ import com.google.gson.Gson;
 import com.xiaoyang.entity.Admin;
 import com.xiaoyang.entity.JsonTreeData;
 import com.xiaoyang.entity.Menu;
+import com.xiaoyang.entity.Submenu;
 import com.xiaoyang.service.impl.AdminService;
+import com.xiaoyang.service.impl.LoginService;
 import com.xiaoyang.util.EasyuiResult;
 
 import net.sf.json.JSONObject;
@@ -39,17 +42,78 @@ public class ManagerController {
 	
 	@Autowired
 	private AdminService easyuitreeService;
+	@Autowired
+	private LoginService loginService;
 	
 	@RequestMapping(value="/thrid",method=RequestMethod.GET)
 	public String toIndex(Model model){
 		return "userinfo";
 	}
 	
+	/**
+	 * 初始化应用引擎的数据模型定义
+	 * @return
+	 */
 	@RequestMapping(value="/appEngine",method=RequestMethod.GET)
 	public String toAppEngine(){
 		return "appEngine";
 	}
 	
+	@RequestMapping(value="/createEntityTable",method=RequestMethod.POST)
+	@ResponseBody
+	public String createEntityTable(@RequestParam(value="data")String data,@RequestParam(value="tableInfo")String tableInfo){
+		JSONObject json = new JSONObject();
+		try {
+			this.easyuitreeService.createEntityTable(data,tableInfo);
+			json.put("status", true);
+			json.put("msg", "数据表操作成功!");
+		} catch (Exception e) { //异常返回信息
+			json.put("status", false);
+			json.put("msg", e.getMessage());
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	
+	/**
+	 * 编辑菜单功能依赖数据表
+	 * @param data
+	 * @return
+	 */
+	@RequestMapping(value="/editDataTable",method=RequestMethod.POST)
+	@ResponseBody
+	public String editDataTable(@RequestParam(value="data") String data){
+		JSONObject json = new JSONObject();
+		try {
+			Submenu submenu = (Submenu)JSONObject.toBean(JSONObject.fromObject(data), Submenu.class);
+			this.easyuitreeService.editDataTable(submenu);
+			json.put("status", true);
+			json.put("msg", "数据实体操作成功!");
+		} catch (Exception e) { //捕获异常返回错误信息
+			e.printStackTrace();
+			json.put("status", false);
+			json.put("msg", e.getMessage());
+		}
+		return json.toString();
+	}
+	
+	/**
+	 * 查询数据表结构
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value="/queryEntity",method=RequestMethod.POST)
+	public @ResponseBody List<Map<String, Object>> queryEntity(@RequestParam(value="id")String id){
+		List<Map<String, Object>> list = this.easyuitreeService.queryEntityByid(id);
+		if(list == null || list.size() ==0){ //数据为空
+			list = new ArrayList<Map<String, Object>>();
+			Map<String, Object> map = new HashMap<String, Object>();
+			map.put("status", "false");
+			list.add(map);
+			return list;
+		}
+		return list;
+	}
 	/**
 	 * 查询树形菜单
 	 * @return
@@ -166,21 +230,21 @@ public class ManagerController {
 	
 	@RequestMapping(value="/saveAuth",method=RequestMethod.POST)
 	@ResponseBody //自动转换为json
-	public Map<String,Object> updateAuthM(HttpSession session,@RequestParam(value = "_id") String _id,@RequestParam(value = "authmenu") String authmenu,@RequestParam(value = "secondMenu") String secondMenu) throws Exception{
-		Admin _admin = (Admin)session.getAttribute("user");
+	public String updateAuthM(HttpSession session,@RequestParam(value = "_id") String _id,@RequestParam(value = "authmenu") String authmenu,@RequestParam(value = "secondMenu") String secondMenu) throws Exception{
+		Admin _admin = this.loginService.queryAdminByid(_id);
+		JSONObject json = new JSONObject();
 		if("admin".equals(_admin.getUsername()))
 		{
 			_admin = null;
 			int count = this.easyuitreeService.updateAuth(_id,authmenu,secondMenu);
-			Map<String,Object> map = new HashMap<String, Object>();
 			if(count > 0){
-				map.put("status", true);
-				map.put("msg", "权限更改成功!");
+				json.put("status", true);
+				json.put("msg", "权限更改成功!");
 			}else{
-				map.put("status", false);
-				map.put("msg", "权限更改失败!");
+				json.put("status", false);
+				json.put("msg", "权限更改失败!");
 			}
-			return map;
+			return json.toString();
 		}else{
 			throw new Exception("你不是管理员,没有权限访问!");
 		}

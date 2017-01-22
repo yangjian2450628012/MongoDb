@@ -19,4 +19,11 @@ public interface LoginDao {
 	List<Admin> queryAll();
 	
 	Sign querySign(String user_id);
+
+	/**
+	 * 根据用户id查询用户信息
+	 * @param id
+	 * @return
+	 */
+	Admin queryAdminByid(String id);
 }

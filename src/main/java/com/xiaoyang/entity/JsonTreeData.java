@@ -14,6 +14,7 @@ public class JsonTreeData {
 	private String state;
 	private List<JsonTreeData> children;
 	private String url;
+	private String ylzd;
 	
 	public String getId() {
 		return id;
@@ -50,5 +51,11 @@ public class JsonTreeData {
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public String getYlzd() {
+		return ylzd;
+	}
+	public void setYlzd(String ylzd) {
+		this.ylzd = ylzd;
 	}
 }

@@ -1,10 +1,12 @@
 package com.xiaoyang.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import com.xiaoyang.entity.Admin;
 import com.xiaoyang.entity.JsonTreeData;
 import com.xiaoyang.entity.Menu;
+import com.xiaoyang.entity.Submenu;
 import com.xiaoyang.util.EasyuiResult;
 
 /** 
@@ -25,4 +27,20 @@ public interface AdminService {
 	void insertAdmin(List<Admin> list);
 	
 	List<JsonTreeData> queryMenuToList();
+
+	List<Map<String,Object>> queryEntityByid(String id);
+
+	/**
+	 * @param 保存功能菜单数据表
+	 * @return
+	 */
+	void editDataTable(Submenu submenu) throws Exception;
+
+	/**
+	 * 创建表
+	 * @param data 数据表属性数组
+	 * @param tableInfo 表信息
+	 * @return 操作结果
+	 */
+	void createEntityTable(String data,String tableInfo) throws Exception;
 }
