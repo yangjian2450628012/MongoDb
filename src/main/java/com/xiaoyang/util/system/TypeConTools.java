@@ -1,4 +1,4 @@
-package com.xiaoyang.util;
+package com.xiaoyang.util.system;
 
 import java.io.IOException;
 import java.io.Reader;

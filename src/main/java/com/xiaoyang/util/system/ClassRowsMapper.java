@@ -1,4 +1,4 @@
-package com.xiaoyang.util;
+package com.xiaoyang.util.system;
 
 import java.lang.reflect.Method;
 import java.sql.ResultSet;
@@ -10,6 +10,7 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.jdbc.core.RowMapper;
 
 /** 
@@ -19,12 +20,12 @@ import org.springframework.jdbc.core.RowMapper;
 * @date 2017年1月19日 下午6:21:21 
 *  
 */
-public class ClassRowsMapper implements RowMapper {
+public class ClassRowsMapper<T> implements RowMapper<T> {
 	private Log log;
-    private Class<?> mapClass;
-    private Object returnObject;
+    private Class<T> mapClass;
+    private T returnObject;
     
-    public ClassRowsMapper(Class<?> mapClass)
+    public ClassRowsMapper(Class<T> mapClass)
     {
         log = LogFactory.getLog(ClassRowsMapper.class);
         setMapClass(mapClass);
@@ -32,7 +33,7 @@ public class ClassRowsMapper implements RowMapper {
 	 /*
 	  *数据查询结果与实体映射
 	  */
-	public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+	public T mapRow(ResultSet rs, int rowNum) throws SQLException {
 		String className = "";
         String fieldName = "";
         Map<Object,Object> methodMap = null;
@@ -125,7 +126,7 @@ public class ClassRowsMapper implements RowMapper {
 	public Class<?> getMapClass() {
 		return mapClass;
 	}
-	public void setMapClass(Class<?> mapClass) {
+	public void setMapClass(Class<T> mapClass) {
 		this.mapClass = mapClass;
 	}
 }

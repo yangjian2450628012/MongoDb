@@ -1,9 +1,9 @@
-package com.xiaoyang.util;
+package com.xiaoyang.util.system;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.xiaoyang.entity.JsonTreeData;
+import com.xiaoyang.entity.system.JsonTreeData;
 
 /** 
 * @ClassName: TreeNodeUtil 
