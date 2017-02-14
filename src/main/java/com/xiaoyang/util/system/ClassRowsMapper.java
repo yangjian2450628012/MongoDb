@@ -10,7 +10,6 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.jdbc.core.RowMapper;
 
 /** 
@@ -76,8 +75,8 @@ public class ClassRowsMapper<T> implements RowMapper<T> {
             {
                 if(methodParamType.equals("java.lang.String") || methodParamType.equals("String"))
                 {
-                    Aem_Annotation annotation = (Aem_Annotation)method.getAnnotation(Aem_Annotation.class);
-                    if(annotation == null || !annotation.isStringClob())
+                	DeAnnotaion annotation = (DeAnnotaion)method.getAnnotation(DeAnnotaion.class);
+                    if(annotation == null || !annotation.isStringBlob())
                     {
                         method.invoke(returnObject, new Object[] {rs.getString(fieldName)});
                         continue;
@@ -87,7 +86,7 @@ public class ClassRowsMapper<T> implements RowMapper<T> {
                         method.invoke(returnObject, new Object[] {sdf.format(rs.getTimestamp(fieldName))});
                         continue;
                     }
-                    if(annotation.isStringClob())
+                    if(annotation.isStringBlob())
                         method.invoke(returnObject, new Object[] {TypeConTools.ClobToStr(rs.getClob(fieldName))});
                     	continue;
                 }

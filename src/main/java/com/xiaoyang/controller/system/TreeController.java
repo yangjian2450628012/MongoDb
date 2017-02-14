@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 import com.xiaoyang.entity.system.JsonTreeData;
-import com.xiaoyang.service.impl.system.AdminService;
+import com.xiaoyang.service.Impl.system.AdminService;
 
 /** 
 * @ClassName: TreeController 

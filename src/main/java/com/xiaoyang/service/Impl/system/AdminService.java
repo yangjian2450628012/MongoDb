@@ -43,4 +43,10 @@ public interface AdminService {
 	 * @return 操作结果
 	 */
 	void createEntityTable(String data,String tableInfo) throws Exception;
+
+	/** 查询数据库表名实体属性
+	 * @param tableName 数据库表名
+	 * @return
+	 */
+	List<Map<String, Object>> queryEntityByName(String tableName);
 }

@@ -1,7 +1,7 @@
 package com.xiaoyang.service.Impl.system;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.xiaoyang.dao.system.IUserDao;
 import com.xiaoyang.entity.system.User;
@@ -10,10 +10,9 @@ import com.xiaoyang.entity.system.User;
 * @ClassName: UserServiceImpl 
 *  
 */
-@Repository
+@Service("userService")
 public class UserServiceImpl implements UserService {
 	
-	@Autowired
 	private IUserDao iuserdao;
 	
 	public void update(User user) {
@@ -37,4 +36,12 @@ public class UserServiceImpl implements UserService {
 		this.iuserdao.delete(user);
 	}
 
+	public IUserDao getIuserdao() {
+		return iuserdao;
+	}
+
+	@Autowired
+	public void setIuserdao(IUserDao iuserdao) {
+		this.iuserdao = iuserdao;
+	}
 }

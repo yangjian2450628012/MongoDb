@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.xiaoyang.dao.system.LoginDao;
 import com.xiaoyang.entity.system.Admin;
@@ -15,10 +15,9 @@ import sun.misc.BASE64Decoder;
 /** 
 * @ClassName: LoginServiceImpl 
 */
-@Repository
+@Service("loginService")
 public class LoginServiceImpl implements LoginService {
 
-	@Autowired
 	private LoginDao loginDao;
 	
 	/**
@@ -74,4 +73,13 @@ public class LoginServiceImpl implements LoginService {
 	public Admin queryAdminByid(String id) {
 		return this.loginDao.queryAdminByid(id);
 	}
+
+	public LoginDao getLoginDao() {
+		return loginDao;
+	}
+	@Autowired
+	public void setLoginDao(LoginDao loginDao) {
+		this.loginDao = loginDao;
+	}
+	
 }

@@ -5,12 +5,12 @@ var well = {
 		init : function(){
 			/*下拉框更换皮肤*/
 			$("#theme-id").combobox({    
-				data: [{name:'默认',value:'default'},
-				       {name:'灰色',value:'gray'},
+				data: [{name:'default',value:'default'},
+				       {name:'gray',value:'gray'},
 				       {name:"Metro",value:"metro"},
-				       {name:"黑色",value:"black"},
+				       {name:"black",value:"black"},
 				       {name:"Bootstrap",value:"bootstrap"},
-				       {name:"布色",value:"material"}],    
+				       {name:"material",value:"material"}],    
 			    valueField:'value',    
 			    textField:'name',
 			    width:110,
@@ -137,10 +137,16 @@ var well = {
 			/*拼接树形菜单*/
 			var zNodes =[{name:"系统模块",open:true,
 			     		children: [{name:"用户管理", "_name":"用户管理","url":contextPath+"/manager/usermanager",target:"my-ifream用户管理"},
-			     		           {name:"部门管理", "_name":"部门管理","url":contextPath+"/manager/deptmanager",target:"my-ifream部门管理"}
-				]},{name:"菜单模块",open:true,
+			     		           {name:"部门管理", "_name":"部门管理","url":contextPath+"/manager/deptmanager",target:"my-ifream部门管理"}]},
+			     		 {name:"菜单模块",open:true,
 						children: [{name:"菜单管理","_name":"菜单管理","url":contextPath+"/manager/menumanager",target:"my-ifream菜单管理"},
-						           {name:"应用引擎","_name":"应用引擎","url":contextPath+"/manager/appEngine",target:"my-ifream应用引擎"}]
+						           {name:"应用引擎",open:true,children:[
+						               {name:"数据模型定义","_name":"数据模型定义","url":contextPath+"/manager/appEngine",target:"my-ifream数据模型定义"},                              
+						               {name:"实体关系维护","_name":"实体关系维护","url":contextPath+"/a",target:"my-ifream实体关系维护"},
+						               {name:"服务模型定义","_name":"服务模型定义","url":contextPath+"/b",target:"my-ifream服务模型定义"},
+						               {name:"代理服务维护","_name":"代理服务维护","url":contextPath+"/c",target:"my-ifream代理服务维护"},
+						               {name:"用户界面模型定义","_name":"用户界面模型定义","url":contextPath+"/c",target:"my-ifream用户界面模型定义"}
+						           ]}]
 				}];
 
 			/*给树形节点增加触发事件*/

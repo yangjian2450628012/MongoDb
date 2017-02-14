@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang.StringUtils;
@@ -25,11 +27,14 @@ import com.xiaoyang.entity.system.Admin;
 import com.xiaoyang.entity.system.JsonTreeData;
 import com.xiaoyang.entity.system.Menu;
 import com.xiaoyang.entity.system.Submenu;
-import com.xiaoyang.service.impl.system.AdminService;
-import com.xiaoyang.service.impl.system.LoginService;
-import com.xiaoyang.util.EasyuiResult;
+import com.xiaoyang.service.Impl.system.AdminService;
+import com.xiaoyang.service.Impl.system.AppEngineService;
+import com.xiaoyang.service.Impl.system.LoginService;
+import com.xiaoyang.util.system.EasyuiResult;
+import com.xiaoyang.util.system.Tools;
 
 import net.sf.json.JSONObject;
+import sun.misc.BASE64Decoder;
 
 /** 
 * @ClassName: MainController 
@@ -44,6 +49,10 @@ public class ManagerController {
 	private AdminService easyuitreeService;
 	@Autowired
 	private LoginService loginService;
+	@Autowired
+	private AppEngineService appEngineService;
+	@Autowired
+	private LoginService loginSevice;
 	
 	@RequestMapping(value="/thrid",method=RequestMethod.GET)
 	public String toIndex(Model model){
@@ -67,6 +76,22 @@ public class ManagerController {
 			this.easyuitreeService.createEntityTable(data,tableInfo);
 			json.put("status", true);
 			json.put("msg", "数据表操作成功!");
+		} catch (Exception e) { //异常返回信息
+			json.put("status", false);
+			json.put("msg", e.getMessage());
+			e.printStackTrace();
+		}
+		return json.toString();
+	}
+	
+	@RequestMapping(value="/createDataMoudle",method=RequestMethod.POST)
+	@ResponseBody
+	public String createDataMoudle(@RequestParam(value="data")String data,@RequestParam(value="tableInfo")String tableInfo){
+		JSONObject json = new JSONObject();
+		try {
+			this.appEngineService.createDataMoudle(tableInfo, data);
+			json.put("status", true);
+			json.put("msg", "实体生成成功!");
 		} catch (Exception e) { //异常返回信息
 			json.put("status", false);
 			json.put("msg", e.getMessage());
@@ -103,7 +128,11 @@ public class ManagerController {
 	 * @return
 	 */
 	@RequestMapping(value="/queryEntity",method=RequestMethod.POST)
-	public @ResponseBody List<Map<String, Object>> queryEntity(@RequestParam(value="id")String id){
+	public @ResponseBody List<Map<String, Object>> queryEntity(@RequestParam(value="id")String id,@RequestParam(value="tableName")String tableName){
+		if(!Tools.StringIsNullOrSpace(tableName)){
+			List<Map<String, Object>> list = this.easyuitreeService.queryEntityByName(tableName);
+			return list;
+		}
 		List<Map<String, Object>> list = this.easyuitreeService.queryEntityByid(id);
 		if(list == null || list.size() ==0){ //数据为空
 			list = new ArrayList<Map<String, Object>>();
@@ -130,8 +159,14 @@ public class ManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/usermanager",method=RequestMethod.GET)
-	public String toUserManager(HttpSession session) throws Exception{
-		Admin admin = (Admin)session.getAttribute("user");
+	public String toUserManager(HttpSession session,HttpServletRequest request) throws Exception{
+		Cookie[] cookies = request.getCookies();
+		Map<String,String> cookieMap = new HashMap<String,String>();
+		for (Cookie cookie : cookies) {
+			cookieMap.put(cookie.getName(), cookie.getValue());
+		}
+		String id = new String(new BASE64Decoder().decodeBuffer(cookieMap.get("uso")),"UTF-8").split(":")[0];
+		Admin admin = this.loginSevice.queryAdminByid(id);
 		if("admin".equals(admin.getUsername()))
 		{
 			admin = null;
@@ -169,8 +204,14 @@ public class ManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/menumanager",method=RequestMethod.GET)
-	public String toMenumanager(HttpSession session) throws Exception{
-		Admin admin = (Admin)session.getAttribute("user");
+	public String toMenumanager(HttpSession session,HttpServletRequest request) throws Exception{
+		Cookie[] cookies = request.getCookies();
+		Map<String,String> cookieMap = new HashMap<String,String>();
+		for (Cookie cookie : cookies) {
+			cookieMap.put(cookie.getName(), cookie.getValue());
+		}
+		String id = new String(new BASE64Decoder().decodeBuffer(cookieMap.get("uso")),"UTF-8").split(":")[0];
+		Admin admin = this.loginSevice.queryAdminByid(id);
 		if("admin".equals(admin.getUsername()))
 		{
 			admin = null;
@@ -194,8 +235,14 @@ public class ManagerController {
 	@RequestMapping(value="/getUserManagerDatas",method=RequestMethod.POST)
 	@ResponseBody
 	public EasyuiResult getUserManagerData(@RequestParam(value = "page", defaultValue = "1") Integer page,
-			@RequestParam(value = "rows", defaultValue = "10") Integer rows,@ModelAttribute Admin admin,HttpSession session) throws Exception{
-		Admin _admin = (Admin)session.getAttribute("user");
+			@RequestParam(value = "rows", defaultValue = "10") Integer rows,@ModelAttribute Admin admin,HttpSession session,HttpServletRequest request) throws Exception{
+		Cookie[] cookies = request.getCookies();
+		Map<String,String> cookieMap = new HashMap<String,String>();
+		for (Cookie cookie : cookies) {
+			cookieMap.put(cookie.getName(), cookie.getValue());
+		}
+		String id = new String(new BASE64Decoder().decodeBuffer(cookieMap.get("uso")),"UTF-8").split(":")[0];
+		Admin _admin = this.loginSevice.queryAdminByid(id);
 		if("admin".equals(_admin.getUsername()))
 		{
 			_admin = null;
@@ -214,8 +261,14 @@ public class ManagerController {
 	 * @throws Exception
 	 */
 	@RequestMapping(value="/toMenuAuth",method=RequestMethod.GET)
-	public ModelAndView toMenuAuthManager(HttpSession session,@RequestParam(value = "_id") String _id) throws Exception{
-		Admin _admin = (Admin)session.getAttribute("user");
+	public ModelAndView toMenuAuthManager(HttpSession session,@RequestParam(value = "_id") String _id,HttpServletRequest request) throws Exception{
+		Cookie[] cookies = request.getCookies();
+		Map<String,String> cookieMap = new HashMap<String,String>();
+		for (Cookie cookie : cookies) {
+			cookieMap.put(cookie.getName(), cookie.getValue());
+		}
+		String id = new String(new BASE64Decoder().decodeBuffer(cookieMap.get("uso")),"UTF-8").split(":")[0];
+		Admin _admin = this.loginSevice.queryAdminByid(id);
 		if("admin".equals(_admin.getUsername()))
 		{
 			_admin = null;

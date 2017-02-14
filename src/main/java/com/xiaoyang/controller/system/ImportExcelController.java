@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.xiaoyang.entity.system.Admin;
-import com.xiaoyang.service.impl.system.AdminService;
+import com.xiaoyang.service.Impl.system.AdminService;
 
 
 /** 
@@ -48,7 +48,7 @@ import com.xiaoyang.service.impl.system.AdminService;
 */
 @Controller
 @RequestMapping("/import")
-public class IportExcelController {
+public class ImportExcelController {
 	@Autowired
 	private AdminService adminService;
 	/**

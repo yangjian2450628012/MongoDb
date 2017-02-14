@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.xiaoyang.entity.system.Admin;
 import com.xiaoyang.entity.system.Sign;
-import com.xiaoyang.service.impl.system.LoginService;
-import com.xiaoyang.util.ValidateCodeUtil;
+import com.xiaoyang.service.Impl.system.LoginService;
+import com.xiaoyang.util.system.ValidateCodeUtil;
 
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
@@ -116,12 +117,13 @@ public class LoginController {
 	 */
 	@RequestMapping(value="check",method=RequestMethod.POST)
 	public String goCheck(@RequestParam(value = "_value")String _value,@RequestParam(value = "validation")String va,
-			HttpSession session,HttpServletResponse response){
+			HttpSession session,HttpServletResponse response,RedirectAttributes attr){
 		try {
 			boolean b = true; 
 			if(!va.toUpperCase().equals(session.getAttribute("code"))){
 				b = false;
 				logger.info("登录失败,验证码错误!");
+				attr.addFlashAttribute("error", "登录失败,验证码错误!");
 				return "redirect:/login.jsp";
 			}
 			String uso = this.loginSevice.query(_value);
@@ -138,11 +140,13 @@ public class LoginController {
 				return "redirect:index";
 			}else{
 				logger.info("登录失败,用户名或密码错误!");
+				attr.addFlashAttribute("error", "登录失败,用户名或密码错误!");
 				return "redirect:/login.jsp";
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
+			attr.addFlashAttribute("error", e.getMessage());
 		}
 		return "redirect:/login.jsp";
 	}

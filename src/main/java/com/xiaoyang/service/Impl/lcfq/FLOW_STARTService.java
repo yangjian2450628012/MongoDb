@@ -24,7 +24,7 @@ public interface FLOW_STARTService {
 	public int fLOW_START_delete(List<FLOW_START>  _deleteFLOW_STARTList);
 	
 	/**功能：查询 不分页,不建议使用。
-	*  建议使用 queryByPage(FLOW_START _eCPJ_SBJCXXK,Integer page,Integer rows),将 分页信息page,rows设置为0即可。
+	*  建议使用 queryByPage(FLOW_START _fLOW_START,Integer page,Integer rows),将 分页信息page,rows设置为0即可。
     * @param _fLOW_START
 	* @return int 返回查询记录行数
 	*/
@@ -60,7 +60,7 @@ public interface FLOW_STARTService {
 	/**功能：自由条件查询 不分页，不建议使用。
 	*  建议使用 queryUserDefineConditionByPage(String sql,Integer page,Integer rows),将 page,rows 分页信息设置为空即可。
 	* @param FLOW_START
-	* @return List<ECPJ_SBJCXXK> 返回查询记录动态对象数组
+	* @return List<FLOW_START> 返回查询记录动态对象数组
 	*/
 	public List<FLOW_START> fLOW_START_queryUserDefineCondition(String sql);
 	

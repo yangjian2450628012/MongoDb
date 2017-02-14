@@ -15,6 +15,7 @@ public class JsonTreeData {
 	private List<JsonTreeData> children;
 	private String url;
 	private String ylzd;
+	private String packageN;
 	
 	public String getId() {
 		return id;
@@ -57,5 +58,11 @@ public class JsonTreeData {
 	}
 	public void setYlzd(String ylzd) {
 		this.ylzd = ylzd;
+	}
+	public String getPackageN() {
+		return packageN;
+	}
+	public void setPackageN(String packageN) {
+		this.packageN = packageN;
 	}
 }

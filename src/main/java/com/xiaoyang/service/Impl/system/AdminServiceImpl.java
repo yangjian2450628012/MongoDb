@@ -16,7 +16,7 @@ import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.xiaoyang.dao.system.AdminDao;
 import com.xiaoyang.entity.system.Admin;
@@ -26,6 +26,7 @@ import com.xiaoyang.entity.system.Menu;
 import com.xiaoyang.entity.system.Submenu;
 import com.xiaoyang.entity.system.Trees;
 import com.xiaoyang.util.system.ClassRowsMapper;
+import com.xiaoyang.util.system.ClassSQLWrite;
 import com.xiaoyang.util.system.EasyuiResult;
 import com.xiaoyang.util.system.TreeNodeUtil;
 
@@ -36,14 +37,12 @@ import net.sf.json.JSONObject;
 /** 
 * @ClassName: EasyuitreeServiceImpl 
 */
-@Repository
+@Service("adminService")
 public class AdminServiceImpl implements AdminService {
-
-	@Autowired
-	private AdminDao easyuitreeDao; 
-	@Autowired
-	private JdbcTemplate jdbcTemplate; 
 	
+	private AdminDao easyuitreeDao;
+	
+	private JdbcTemplate JdbcTemplate;
 	/* *
 	 * 查询树形菜单
 	 */
@@ -105,7 +104,7 @@ public class AdminServiceImpl implements AdminService {
 		JsonTreeDataZ.setYlzd("fn");
 		
 		String sql = "select id,text,type from menu order by orderA asc";
-		List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sql);
+		List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sql);
 		for (Map<String, Object> map : list) {
 			JsonTreeData JsonTreeData = new JsonTreeData();
 			JsonTreeData.setId(map.get("id").toString());
@@ -139,8 +138,8 @@ public class AdminServiceImpl implements AdminService {
 	private List<JsonTreeData> queryMenuC(Object id){
 		List<JsonTreeData> result = new ArrayList<JsonTreeData>();
 		
-		String sqlC = "select id,text,pid,url,type from submenu where pid ='"+id+"' order by orderA asc";
-		List<Map<String, Object>> list = this.jdbcTemplate.queryForList(sqlC);
+		String sqlC = "select id,text,pid,url,type,packageN from submenu where pid ='"+id+"' order by orderA asc";
+		List<Map<String, Object>> list = this.getJdbcTemplate().queryForList(sqlC);
 		for (Map<String, Object> map : list) {
 			JsonTreeData JsonTreeData = new JsonTreeData();
 			JsonTreeData.setId(map.get("id").toString());
@@ -160,6 +159,7 @@ public class AdminServiceImpl implements AdminService {
 			JsonTreeData.setPid(id.toString());
 			JsonTreeData.setYlzd(map.get("type").toString());
 			JsonTreeData.setUrl(map.get("url")==null ? "": map.get("url").toString());
+			JsonTreeData.setPackageN(map.get("packageN") == null ? "" : map.get("packageN").toString());
 			List<JsonTreeData> listC = this.queryMenuC(map.get("id")); //调用递归
 			if(listC != null && listC.size() > 0){
 				JsonTreeData.setChildren(listC);
@@ -185,7 +185,7 @@ public class AdminServiceImpl implements AdminService {
 		try {
 			//查询数据表
 			ClassRowsMapper classmapper = new ClassRowsMapper<AemEntity>(AemEntity.class);
-			List<AemEntity> list_aementity = this.jdbcTemplate.query("select id,package_id,name,comm,createtime,create_flag from aem_entity where package_id='"+id+"'", classmapper);
+			List<AemEntity> list_aementity = this.getJdbcTemplate().query("select id,package_id,name,comm,createtime,create_flag from aem_entity where package_id='"+id+"'", classmapper);
 			if(list_aementity.size() > 0){
 				AemEntity aementity = (AemEntity)list_aementity.get(0);
 				list = new ArrayList<Map<String,Object>>();
@@ -197,7 +197,7 @@ public class AdminServiceImpl implements AdminService {
 				map.put("createtime", aementity.getCreatetime());
 				map.put("create_flag", aementity.getCreate_flag());
 				list.add(map);
-				conn = this.jdbcTemplate.getDataSource().getConnection(); //得到连接
+				conn = this.getJdbcTemplate().getDataSource().getConnection(); //得到连接
 				rs = conn.getMetaData().getColumns(null, null, aementity.getName(), null);
 				rm = rs.getMetaData();
 				int columns = rm.getColumnCount();
@@ -211,7 +211,7 @@ public class AdminServiceImpl implements AdminService {
 				//获取主键信息
 				Set<String> keysSet =  new HashSet<String>(); 
 				try {
-					Connection connection = this.jdbcTemplate.getDataSource().getConnection();
+					Connection connection = this.getJdbcTemplate().getDataSource().getConnection();
 					Keys =	conn.getMetaData().getPrimaryKeys(null, null, aementity.getName());
 					while(Keys.next()){
 						keysSet.add(Keys.getString("COLUMN_NAME"));
@@ -268,10 +268,10 @@ public class AdminServiceImpl implements AdminService {
 		}else if("del".equals(submenu.getType())) //删除功能菜单表
 		{
 			//删除数据表
-			List<Map<String, Object>> list_tablename = this.jdbcTemplate.queryForList("select name from aem_entity where package_id ='"+submenu.getId()+"'");
+			List<Map<String, Object>> list_tablename = this.getJdbcTemplate().queryForList("select name from aem_entity where package_id ='"+submenu.getId()+"'");
 			if(list_tablename != null && list_tablename.size() > 0){
-				this.jdbcTemplate.execute("delete from aem_entity where package_id ='"+submenu.getId()+"'");
-				this.jdbcTemplate.execute("DROP TABLE IF EXISTS `"+list_tablename.get(0).get("name")+"`");
+				this.getJdbcTemplate().execute("delete from aem_entity where package_id ='"+submenu.getId()+"'");
+				this.getJdbcTemplate().execute("DROP TABLE IF EXISTS `"+list_tablename.get(0).get("name")+"`");
 			}
 			sb = new StringBuilder("delete from submenu where id='");
 			sb.append(submenu.getId()).append("';");
@@ -279,15 +279,17 @@ public class AdminServiceImpl implements AdminService {
 		{
 			SimpleDateFormat dataF = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String nowTime = dataF.format(new Date());
-			sb = new StringBuilder("insert into submenu(id,text,pid,createtime,url,orderA,type) values('");
+			sb = new StringBuilder("insert into submenu(id,text,pid,createtime,url,orderA,type,packageN) values('");
 			sb.append(submenu.getId()).append("','");
 			sb.append(submenu.getText()).append("','");
 			sb.append(submenu.getPid()).append("','");
 			sb.append(nowTime).append("','");
 			sb.append(submenu.getUrl()).append("',");
-			sb.append(1).append(",").append("'en' );");
+			sb.append(1).append(",").append("'en','");
+			sb.append(submenu.getPackageN()).append("')");
 		}
-		this.jdbcTemplate.execute(sb.toString());
+		ClassSQLWrite.printSQL(sb.toString());
+		this.getJdbcTemplate().execute(sb.toString());
 	}
 
 	/* 构造创建表语句，并提交
@@ -305,16 +307,17 @@ public class AdminServiceImpl implements AdminService {
 			String sql = "insert into aem_entity(id,package_id,name,comm,createtime,create_flag) "
 					+ "values('"+id+"','"+tableObject.getString("package_id")+"','"+tableObject.getString("entityName")+"',"
 							+ "'"+tableObject.getString("remark")+"','"+sf.format(new Date())+"',1 )";
-			this.jdbcTemplate.execute(sql);
+			this.getJdbcTemplate().execute(sql);
 		}else{
 			String sql = "update aem_entity set name = '"+tableObject.getString("entityName")+"',comm ='"+tableObject.getString("remark")+"',"
 					+ "createtime ='"+sf.format(new Date())+"',create_flag=1 where id = '"+tableObject.getString("aem_entityId")+"'";
-			this.jdbcTemplate.update(sql);
+			ClassSQLWrite.printSQL(sql);
+			this.getJdbcTemplate().update(sql);
 		}
 		JSONArray dataArray = JSONArray.fromObject(data); 
 		if(dataArray == null || dataArray.size() == 0) return;
 		//判断删除表
-		this.jdbcTemplate.execute("DROP TABLE IF EXISTS `"+tableObject.getString("entityName")+"`");
+		this.getJdbcTemplate().execute("DROP TABLE IF EXISTS `"+tableObject.getString("entityName")+"`");
 		
 		//遍历属性数组，组装建表语句
 		StringBuilder sbr = new StringBuilder(); 
@@ -352,8 +355,85 @@ public class AdminServiceImpl implements AdminService {
 			sbr.deleteCharAt(sbr.length()-1);//去掉多余逗号
 		}
 		sbr.append(")").append("ENGINE=InnoDB DEFAULT CHARSET=utf8");
-		System.out.println("建表语句====>"+sbr.toString()+"]");
-		
-		this.jdbcTemplate.execute(sbr.toString()); //创建表
+		ClassSQLWrite.printSQL(sbr.toString());
+		this.getJdbcTemplate().execute(sbr.toString()); //创建表
 	}
+	
+	/**
+	 * 根据数据库表名获取实体属性
+	 */
+	public List<Map<String, Object>> queryEntityByName(String tableName) {
+		List<Map<String,Object>> list = null;
+		ResultSet rs = null;
+		ResultSet Keys = null;
+		ResultSetMetaData rm = null;
+		Map<String,Object> map = null;
+		Connection conn = null;
+		
+		try {
+			list = new ArrayList<Map<String,Object>>();
+			conn = this.getJdbcTemplate().getDataSource().getConnection();  //得到连接
+			rs = conn.getMetaData().getColumns(null, null, tableName, null);
+			rm = rs.getMetaData();
+			int columns = rm.getColumnCount();
+			List<String> lista = new ArrayList<String>();
+			
+			for(int i=1;i<=columns;i++)
+			{
+				lista.add(rm.getColumnName(i));
+			}
+			//获取主键信息
+			Set<String> keysSet =  new HashSet<String>(); 
+			try {
+				Connection connection = this.getJdbcTemplate().getDataSource().getConnection();
+				Keys =	conn.getMetaData().getPrimaryKeys(null, null, tableName);
+				while(Keys.next()){
+					keysSet.add(Keys.getString("COLUMN_NAME"));
+				}
+				connection.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			while(rs.next())
+			{
+				 map = new HashMap<String, Object>();
+			  for(int i=1;i<columns;i++)
+			  {
+				  map.put( lista.get(i), rs.getString(lista.get(i)));
+			  }
+			  //查看这一条属性是否包含主键
+			 for (String string : keysSet) {
+				 if(string.equals(map.get("COLUMN_NAME"))){
+					 map.put("PRIMARYKEYS", "YES");
+					 break;
+				 }
+			 }
+			 if(!map.containsKey("PRIMARYKEYS"))map.put("PRIMARYKEYS", "NO");
+			 list.add(map);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	public AdminDao getEasyuitreeDao() {
+		return easyuitreeDao;
+	}
+	@Autowired
+	public void setEasyuitreeDao(AdminDao easyuitreeDao) {
+		this.easyuitreeDao = easyuitreeDao;
+	}
+
+	public JdbcTemplate getJdbcTemplate() {
+		return JdbcTemplate;
+	}
+	@Autowired
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		JdbcTemplate = jdbcTemplate;
+	}
+
+	
+	
 }

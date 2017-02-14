@@ -15,8 +15,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.xiaoyang.entity.Zmenu;
-import com.xiaoyang.util.ClassRowsMapper;
+import com.xiaoyang.entity.system.Zmenu;
+import com.xiaoyang.util.system.ClassRowsMapper;
 
 /** 
 * @ClassName: MainTest 

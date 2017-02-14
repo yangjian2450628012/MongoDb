@@ -1,7 +1,6 @@
 package com.xiaoyang.entity.lcfq;
 
-import org.springframework.data.annotation.Id;
-
+import java.io.Serializable;
 import com.xiaoyang.util.system.DeAnnotaion;
 
 /**
@@ -13,15 +12,19 @@ import com.xiaoyang.util.system.DeAnnotaion;
  *	
  */
 
-public class FLOW_START {
-	@DeAnnotaion(is_autoincrement=false)//表示自增
+public class FLOW_START implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
+	@DeAnnotaion(is_autoincrement=false,isPrimary=true)//自增,主键,是否为空
 	private Integer id; 
 	private String name;
 	private Integer age;
 	private Integer class_id;
+	@DeAnnotaion(isNull=false)
 	public Integer getId() {
 		return id;
 	}
+	@DeAnnotaion(isNull=false)
 	public void setId(Integer id) {
 		this.id = id;
 	}

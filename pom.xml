@@ -7,7 +7,8 @@
   
   <version>0.0.1-SNAPSHOT</version>
   <name>NICEOA Maven Webapp</name>
-  <url>http://maven.apache.org</url> 
+  <url>http://maven.apache.org</url>
+   
 <!-- 从自己的maven服务器下载 -->
 	<!-- <repositories>
 		<repository>
@@ -131,7 +132,11 @@
 			<version>2.5</version>
 			<scope>provided</scope>
 		</dependency>
-        
+        <dependency>
+		    <groupId>org.freemarker</groupId>
+		    <artifactId>freemarker</artifactId>
+		    <version>2.3.17</version>
+		</dependency>
         <!-- 导出excel  -->	
     <dependency>
     	<groupId>org.apache.poi</groupId>
@@ -171,7 +176,7 @@
     </dependencies>
   
   <build>  
-        <finalName>MongDB</finalName>
+        <finalName>NICEOA</finalName>
 		<!-- 配置Tomcat插件 -->
         <plugins>
 			<plugin>

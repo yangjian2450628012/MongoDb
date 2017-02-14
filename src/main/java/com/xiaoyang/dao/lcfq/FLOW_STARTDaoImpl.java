@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.xiaoyang.entity.lcfq.FLOW_START;
 import com.xiaoyang.util.system.ClassRowsMapper;
-import com.xiaoyang.util.system.ClassSQLWire;
+import com.xiaoyang.util.system.ClassSQLWrite;
 import com.xiaoyang.util.system.DeAnnotaion;
 import com.xiaoyang.util.system.Tools;
 
@@ -20,10 +20,10 @@ import com.xiaoyang.util.system.Tools;
  * @author 应用引擎自动生成
  * @date 2017-1-22 09:45:34
  *
- */ 
+ */
 @Repository("fLOW_STARTDao")
 public class FLOW_STARTDaoImpl implements FLOW_STARTDao{
-	ClassSQLWire classSQLWire;
+	ClassSQLWrite ClassSQLWrite;
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 	
@@ -73,11 +73,11 @@ public class FLOW_STARTDaoImpl implements FLOW_STARTDao{
 		List<FLOW_START> fLOW_STARTList = null;
 		String sql;
 
-		sql = this.classSQLWire.ClassSQLSelect(fLOW_STARTList);
+		sql = this.ClassSQLWrite.ClassSQLSelect(fLOW_STARTList);
 		ClassRowsMapper<FLOW_START> classRowsMapper = new ClassRowsMapper<FLOW_START>(FLOW_START.class);
 
 		fLOW_STARTList = this.jdbcTemplate.query(sql, classRowsMapper);
-		ClassSQLWire.printSQL(sql);
+		ClassSQLWrite.printSQL(sql);
 		return fLOW_STARTList;
 	}
 
@@ -87,10 +87,10 @@ public class FLOW_STARTDaoImpl implements FLOW_STARTDao{
 		List<FLOW_START> fLOW_STARTList = null;
 		String sql; 
 		
-		sql = this.classSQLWire.ClassSQLSelectByPage(fLOW_STARTList);
+		sql = this.ClassSQLWrite.ClassSQLSelectByPage(fLOW_STARTList);
 		ClassRowsMapper<FLOW_START> classRowsMapper = new ClassRowsMapper<FLOW_START>(FLOW_START.class);
 		fLOW_STARTList = this.jdbcTemplate.query(sql, classRowsMapper);
-		ClassSQLWire.printSQL(sql);
+		ClassSQLWrite.printSQL(sql);
 		
 		return fLOW_STARTList;
 	}
@@ -101,8 +101,8 @@ public class FLOW_STARTDaoImpl implements FLOW_STARTDao{
 			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
 		String sql;
 
-		sql = this.classSQLWire.ClassSQLSelectCount(_fLOW_START);
-		ClassSQLWire.printSQL(sql);
+		sql = this.ClassSQLWrite.ClassSQLSelectCount(_fLOW_START);
+		ClassSQLWrite.printSQL(sql);
 		return this.jdbcTemplate.queryForInt(sql);
 	}
 
@@ -113,10 +113,10 @@ public class FLOW_STARTDaoImpl implements FLOW_STARTDao{
 		List<FLOW_START> fLOW_STARTList;
 		FLOW_START flow_start = new FLOW_START();
 		
-		sqlZ = this.classSQLWire.ClassSQLSelectUserDefineCondition(flow_start,sql);
+		sqlZ = this.ClassSQLWrite.ClassSQLSelectUserDefineCondition(flow_start,sql);
 		ClassRowsMapper<FLOW_START> classRowsMapper = new ClassRowsMapper<FLOW_START>(FLOW_START.class);
 		fLOW_STARTList = this.jdbcTemplate.query(sql,classRowsMapper);
-		ClassSQLWire.printSQL(sqlZ);
+		ClassSQLWrite.printSQL(sqlZ);
 		
 		return fLOW_STARTList;
 	}
@@ -128,10 +128,10 @@ public class FLOW_STARTDaoImpl implements FLOW_STARTDao{
 		List<FLOW_START> fLOW_STARTList;
 		FLOW_START flow_start = new FLOW_START();
 		
-		sqlZ = this.classSQLWire.ClassSQLSelectUserDefineConditionByPage(flow_start,sql,page,rows);
+		sqlZ = this.ClassSQLWrite.ClassSQLSelectUserDefineConditionByPage(flow_start,sql,page,rows);
 		ClassRowsMapper<FLOW_START> classRowsMapper = new ClassRowsMapper<FLOW_START>(FLOW_START.class);
 		fLOW_STARTList = this.jdbcTemplate.query(sql,classRowsMapper);
-		ClassSQLWire.printSQL(sqlZ);
+		ClassSQLWrite.printSQL(sqlZ);
 		
 		return fLOW_STARTList;
 	}
@@ -147,15 +147,14 @@ public class FLOW_STARTDaoImpl implements FLOW_STARTDao{
 	//自定义条件查询 查询记录条数 实现函数
 	public Integer queryForUserDefineSQLCount(String sql) 
 			throws IllegalArgumentException, IllegalAccessException, InvocationTargetException {
-		String sqlZ;
 
 		if (Tools.StringIsNullOrSpace(sql)) {
-			sqlZ = "select count(1) from ECPJ_SBJCXXK ";
+			sql = "select count(1) from ECPJ_SBJCXXK ";
 		} else {
-			sqlZ = "select count(1) from ECPJ_SBJCXXK " + sql;
+			sql = "select count(1) from ECPJ_SBJCXXK " + sql;
 		}
 		
-		ClassSQLWire.printSQL(sql);
+		ClassSQLWrite.printSQL(sql);
 		return jdbcTemplate.queryForInt(sql);
 	}
 
@@ -183,17 +182,17 @@ public class FLOW_STARTDaoImpl implements FLOW_STARTDao{
 //				}
 //			}	
 		}
-		if("插入".equals(type))
-			sqlList = this.classSQLWire.BatchClassSQLInsert(_fLOW_STARTList);
-		else if("删除".equals(type))
-			sqlList = this.classSQLWire.BatchClassSQLDelete(_fLOW_STARTList);
-		else if("更新".equals(type))	
-			sqlList = this.classSQLWire.BatchClassSQLUpdate(_fLOW_STARTList);
+//		if("插入".equals(type))
+//			//sqlList = this.ClassSQLWrite.batchClassSQLInsert(_fLOW_STARTList);
+//		else if("删除".equals(type))
+//			//sqlList = this.ClassSQLWrite.BatchClassSQLDelete(_fLOW_STARTList);
+//		else if("更新".equals(type))	
+//			// = this.ClassSQLWrite.BatchClassSQLUpdate(_fLOW_STARTList);
 		if(sqlList == null || sqlList.size() ==0) throw new RuntimeException("生成的"+type+"SQL为空，请检查");
-		ClassSQLWire.printSQL("成功生成 "+sqlList.size()+" 条，"+type+"SQL语句。");
+		ClassSQLWrite.printSQL("成功生成 "+sqlList.size()+" 条，"+type+"SQL语句。");
 		for (String sql : sqlList) {
 			count ++;
-			ClassSQLWire.printSQL(sql); //输出SQL日志
+			ClassSQLWrite.printSQL(sql); //输出SQL日志
 			this.jdbcTemplate.execute(sql); //执行sql
 		}
 		return count;

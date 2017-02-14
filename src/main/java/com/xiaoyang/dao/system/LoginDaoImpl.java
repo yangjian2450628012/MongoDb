@@ -14,10 +14,9 @@ import com.xiaoyang.entity.system.Sign;
 /** 
 * @ClassName: LoginDaoImpl 
 */
-@Repository
+@Repository("loginDao")
 public class LoginDaoImpl implements LoginDao {
 
-	@Autowired
 	private MongoTemplate mongoTemplate;
 
 	/**
@@ -58,4 +57,13 @@ public class LoginDaoImpl implements LoginDao {
 	public Admin queryAdminByid(String id) {
 		return this.mongoTemplate.findOne(new Query(Criteria.where("_id").is(id)), Admin.class);
 	}
+
+	public MongoTemplate getMongoTemplate() {
+		return mongoTemplate;
+	}
+	@Autowired
+	public void setMongoTemplate(MongoTemplate mongoTemplate) {
+		this.mongoTemplate = mongoTemplate;
+	}
+	
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import com.xiaoyang.entity.system.Admin;
 import com.xiaoyang.entity.system.Menu;
 import com.xiaoyang.entity.system.Trees;
-import com.xiaoyang.util.EasyuiResult;
+import com.xiaoyang.util.system.EasyuiResult;
 
 /** 
 * @ClassName: EasyuitreeDao 

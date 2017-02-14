@@ -10,6 +10,7 @@ package com.xiaoyang.entity.system;
 public class Submenu extends Zmenu{
 	private String pid;
 	private String url;
+	private String packageN;
 	public String getPid() {
 		return pid;
 	}
@@ -21,5 +22,11 @@ public class Submenu extends Zmenu{
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public String getPackageN() {
+		return packageN;
+	}
+	public void setPackageN(String packageN) {
+		this.packageN = packageN;
 	}
 }

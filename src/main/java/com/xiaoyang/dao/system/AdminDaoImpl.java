@@ -15,25 +15,22 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.xiaoyang.entity.system.Admin;
 import com.xiaoyang.entity.system.Menu;
 import com.xiaoyang.entity.system.Sign;
 import com.xiaoyang.entity.system.Trees;
-import com.xiaoyang.util.EasyuiResult;
+import com.xiaoyang.util.system.EasyuiResult;
 
 import net.sf.json.JSONArray;
 
 /** 
 * @ClassName: EasyuitreeDaoImpl 
 */
-@Repository
+@Repository("adminDao")
 public class AdminDaoImpl implements AdminDao{
 	
-	@Autowired
 	private MongoTemplate mongoTemplate;
 	
 	/**
@@ -205,4 +202,13 @@ public class AdminDaoImpl implements AdminDao{
 			this.mongoTemplate.upsert(new Query(Criteria.where("user_id").is(user_id)), update, Sign.class);
 		}
 	}
+
+	public MongoTemplate getMongoTemplate() {
+		return mongoTemplate;
+	}
+	@Autowired
+	public void setMongoTemplate(MongoTemplate mongoTemplate) {
+		this.mongoTemplate = mongoTemplate;
+	}
+	
 }

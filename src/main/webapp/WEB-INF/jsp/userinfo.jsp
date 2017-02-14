@@ -9,7 +9,7 @@
 <script type="text/javascript">
 var _theme,reg=new RegExp("(^| )theme=([^;]*)(;|$)");
 if(_theme=document.cookie.match(reg))_theme=unescape(_theme[2]);
-_theme != undefined ?document.write("<link rel=\"stylesheet\" href=\"<%=path %>/easyui/css/"+_theme+"/easyui.css\" type=\"text/css\" media=\"screen\"/>"):document.write("<link rel=\"stylesheet\" href=\"<%=path %>/easyui/css/default/easyui.css\" type=\"text/css\" media=\"screen\"/>");_theme=null;
+_theme != undefined ?document.write("<link rel=\"stylesheet\" href=\"<%=path %>/easyui/css/"+_theme+"/easyui.css\" type=\"text/css\" media=\"screen\"/>"):document.write("<link rel=\"stylesheet\" href=\"<%=path %>/easyui/css/gray/easyui.css\" type=\"text/css\" media=\"screen\"/>");_theme=null;
 </script>
 <link href="<%=path %>/easyui/css/icon.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript">var contextPath="<%=path%>";</script>
