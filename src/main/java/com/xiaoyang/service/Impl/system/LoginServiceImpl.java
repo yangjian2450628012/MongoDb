@@ -24,28 +24,26 @@ public class LoginServiceImpl implements LoginService {
 	 * 根據查詢結果返回是真假
 	 * @throws IOException 
 	 */
-	public String query(String _value) {
+	public String query(String _value) throws IOException {
 		String info = "";
-		try {
-			String[] dec = new String(new BASE64Decoder().decodeBuffer(_value)).split(":");
-			Admin admin = new Admin();
-			admin.setUsername(dec[0]);
-			admin.setPassword(dec[1]);
-			Admin _admin = this.loginDao.query(admin);
-			if(_admin == null)
-			{
-				return info;
-			}
-			if(!admin.getUsername().equals(_admin.getUsername())&&!admin.getPassword().equals(_admin.getPassword()) )
-			{
-				return info;
-			}
-			//把用户信息加密放到cookie中
-			info = _admin.get_id()+":"+admin.getUsername();
-//			session.setAttribute("user", _admin);
-		} catch (Exception e) {
-			e.printStackTrace();
+
+		String[] dec = new String(new BASE64Decoder().decodeBuffer(_value)).split(":");
+		Admin admin = new Admin();
+		admin.setUsername(dec[0]);
+		admin.setPassword(dec[1]);
+		Admin _admin = this.loginDao.query(admin);
+		if(_admin == null)
+		{
+			return info;
 		}
+		if(!admin.getUsername().equals(_admin.getUsername())&&!admin.getPassword().equals(_admin.getPassword()) )
+		{
+			return info;
+		}
+		//把用户信息加密放到cookie中
+		info = _admin.get_id()+":"+admin.getUsername();
+//		session.setAttribute("user", _admin);
+		
 		return info;
 	}
 

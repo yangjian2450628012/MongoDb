@@ -1,6 +1,7 @@
 package com.xiaoyang.controller.system;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -114,21 +116,20 @@ public class LoginController {
 	 * @param _value
 	 * @param session
 	 * @return
+	 * @throws UnsupportedEncodingException 
 	 */
 	@RequestMapping(value="check",method=RequestMethod.POST)
-	public String goCheck(@RequestParam(value = "_value")String _value,@RequestParam(value = "validation")String va,
-			HttpSession session,HttpServletResponse response,RedirectAttributes attr){
+	public ModelAndView goCheck(@RequestParam(value = "_value")String _value,@RequestParam(value = "validation")String va,
+			HttpSession session,HttpServletResponse response) throws UnsupportedEncodingException{
 		try {
 			boolean b = true; 
 			if(!va.toUpperCase().equals(session.getAttribute("code"))){
 				b = false;
 				logger.info("登录失败,验证码错误!");
-				attr.addFlashAttribute("error", "登录失败,验证码错误!");
-				return "redirect:/login.jsp";
+				return new ModelAndView("redirect:/login.jsp").addObject("error", "Login failed, verification code error!");
 			}
 			String uso = this.loginSevice.query(_value);
 			if(!"".equals(uso) && b){
-			//	session.setAttribute("userinfo", b);
 				Cookie cookie = new Cookie("userinfo", "ok");
 				Cookie cookie2 = new Cookie("uso",new BASE64Encoder().encode(uso.getBytes("UTF-8"))); //设置cookie
 				cookie.setPath("/");
@@ -137,18 +138,22 @@ public class LoginController {
 				cookie2.setMaxAge(3600);
 				response.addCookie(cookie);
 				response.addCookie(cookie2);
-				return "redirect:index";
+				return new ModelAndView("redirect:index");
 			}else{
 				logger.info("登录失败,用户名或密码错误!");
-				attr.addFlashAttribute("error", "登录失败,用户名或密码错误!");
-				return "redirect:/login.jsp";
+				return new ModelAndView("redirect:/login.jsp").addObject("error", "Login failed, the user name or password error");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage());
-			attr.addFlashAttribute("error", e.getMessage());
+			StringBuilder sb = new StringBuilder();
+			if(e.getMessage().indexOf("Unable to connect to any servers") != -1){
+				sb.append("Connect to the server failed");
+			}else{
+				sb.append(e.getMessage());
+			}
+			return new ModelAndView("redirect:/login.jsp").addObject("error", sb.toString());
 		}
-		return "redirect:/login.jsp";
 	}
 	
 	/**

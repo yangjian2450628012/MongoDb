@@ -1,8 +1,7 @@
 package com.xiaoyang.service.Impl.system;
 
+import java.io.IOException;
 import java.util.List;
-
-import javax.servlet.http.HttpServletResponse;
 
 import com.xiaoyang.entity.system.Admin;
 import com.xiaoyang.entity.system.Sign;
@@ -12,7 +11,7 @@ import com.xiaoyang.entity.system.Sign;
 */
 public interface LoginService {
 	
-	String query(String _value);
+	String query(String _value) throws IOException;
 	
 	boolean update(Admin admin);
 	

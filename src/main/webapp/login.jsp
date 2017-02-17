@@ -43,7 +43,8 @@
 				<div class="formRow clearfix">
 					<label class="checkbox">
 						<input type="checkbox" onclick="choosebox()" checked="checked" id="rememberMe" name="rememberMe" value="1" /> 下次自动登陆
-					</label>${msg }
+					</label>
+					<span style="color:red;">${param.error}</span>
 				</div>
 			</div>
 			<div class="btm_b clearfix">

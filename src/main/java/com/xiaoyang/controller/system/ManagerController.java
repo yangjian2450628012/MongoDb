@@ -35,6 +35,7 @@ import com.xiaoyang.util.system.Tools;
 
 import net.sf.json.JSONObject;
 import sun.misc.BASE64Decoder;
+import sun.misc.BASE64Encoder;
 
 /** 
 * @ClassName: MainController 

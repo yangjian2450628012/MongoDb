@@ -92,7 +92,7 @@ public class ${ent.entityName?cap_first}DaoImpl implements ${ent.entityName?cap_
 			}
 			List<String> sqlList = new ArrayList<String>();
 			List<List> paramList = new ArrayList<List>();
-			int sqlcount = this.classSQLWrite.BatchClassSQLDelete(_${ent.entityName?uncap_first}List);
+			int sqlcount = this.classSQLWrite.batchClassSQLDelete(_${ent.entityName?uncap_first}List,sqlList,paramList);
 			if(sqlList == null || sqlList.size() ==0) 
 				throw new RuntimeException("删除的插入SQL为空，请检查");
 			ClassSQLWrite.printSQL("成功生成 "+sqlcount+" 条，更新SQL语句。");
